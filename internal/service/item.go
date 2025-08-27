@@ -511,35 +511,60 @@ type BulkAddResult struct {
 }
 
 // BulkUpdateItems updates multiple items with same field value
-func (s *ItemService) BulkUpdateItems(_ context.Context, input BulkUpdateInput) (*BulkUpdateResult, error) {
+func (s *ItemService) BulkUpdateItems(ctx context.Context, input BulkUpdateInput) (*BulkUpdateResult, error) {
 	result := &BulkUpdateResult{}
 
+	// For each item, update the field value using GraphQL mutation
 	for _, itemID := range input.ItemIDs {
-		// For now, this is a placeholder implementation
-		// In real implementation, this would execute GraphQL mutations to update items
-		fmt.Printf("Updating item %s: %s = %v\n", itemID, input.FieldName, input.Value)
-		result.Updated++
+		// Use the existing UpdateItemField GraphQL mutation
+		var mutation graphql.UpdateItemFieldMutation
+		variables := map[string]interface{}{
+			"projectId": input.ProjectID,
+			"itemId":    itemID,
+			"fieldId":   input.FieldName, // This should be field ID, not name
+			"value": map[string]interface{}{
+				"text": input.Value, // Assuming text field for now
+			},
+		}
+
+		err := s.client.Mutate(ctx, &mutation, variables)
+		if err != nil {
+			result.Failed++
+			result.Errors = append(result.Errors, fmt.Sprintf("failed to update item %s: %v", itemID, err))
+		} else {
+			result.Updated++
+		}
 	}
 
 	return result, nil
 }
 
 // BulkAddItems adds multiple items to a project
-func (s *ItemService) BulkAddItems(_ context.Context, input BulkAddInput) (*BulkAddResult, error) {
+func (s *ItemService) BulkAddItems(ctx context.Context, input BulkAddInput) (*BulkAddResult, error) {
 	result := &BulkAddResult{}
 
 	for _, item := range input.Items {
-		// For now, this is a placeholder implementation
-		// In real implementation, this would execute GraphQL mutations to add items
-		fmt.Printf("Adding item: %s\n", item.Title)
-		result.Added++
+		// Use the existing AddItemToProject GraphQL mutation
+		var mutation graphql.AddItemToProjectMutation
+		variables := map[string]interface{}{
+			"projectId": input.ProjectID,
+			"contentId": item.ContentID, // This would be the issue/PR ID
+		}
+
+		err := s.client.Mutate(ctx, &mutation, variables)
+		if err != nil {
+			result.Failed++
+			result.Errors = append(result.Errors, fmt.Sprintf("failed to add item %s: %v", item.Title, err))
+		} else {
+			result.Added++
+		}
 	}
 
 	return result, nil
 }
 
 // GetItemsByFilter retrieves items based on filter criteria
-func (s *ItemService) GetItemsByFilter(_ context.Context, projectID, filter string) ([]string, error) {
+func (s *ItemService) GetItemsByFilter(ctx context.Context, projectID, filter string) ([]string, error) {
 	// Parse filter string (e.g., "label:epic", "assignee:@me")
 	parts := strings.Split(filter, ":")
 	if len(parts) != 2 {
@@ -549,12 +574,59 @@ func (s *ItemService) GetItemsByFilter(_ context.Context, projectID, filter stri
 	filterType := strings.TrimSpace(parts[0])
 	filterValue := strings.TrimSpace(parts[1])
 
-	// For now, this is a placeholder implementation
-	// In real implementation, this would execute GraphQL queries to find matching items
-	fmt.Printf("Filtering items in project %s by %s = %s\n", projectID, filterType, filterValue)
+	switch filterType {
+	case "label":
+		return s.GetItemsByLabel(ctx, filterValue)
+	case "assignee":
+		return s.getItemsByAssignee(ctx, filterValue)
+	case "state":
+		return s.getItemsByState(ctx, filterValue)
+	default:
+		return nil, fmt.Errorf("unsupported filter type: %s", filterType)
+	}
+}
 
-	// Return placeholder item IDs
-	return []string{"item_1", "item_2", "item_3"}, nil
+// GetItemsByLabel retrieves items with specific label
+func (s *ItemService) GetItemsByLabel(ctx context.Context, label string) ([]string, error) {
+	return s.searchIssuesByQuery(ctx, fmt.Sprintf("label:%s", label), "failed to search issues by label")
+}
+
+// getItemsByAssignee retrieves items by assignee
+func (s *ItemService) getItemsByAssignee(ctx context.Context, assignee string) ([]string, error) {
+	searchAssignee := assignee
+	if assignee == "@me" {
+		searchAssignee = "@me"
+	}
+
+	return s.searchIssuesByQuery(ctx, fmt.Sprintf("assignee:%s", searchAssignee), "failed to search issues by assignee")
+}
+
+// getItemsByState retrieves items by state
+func (s *ItemService) getItemsByState(ctx context.Context, state string) ([]string, error) {
+	return s.searchIssuesByQuery(ctx, fmt.Sprintf("state:%s", state), "failed to search issues by state")
+}
+
+// searchIssuesByQuery is a helper function to search issues with a query string
+func (s *ItemService) searchIssuesByQuery(ctx context.Context, query, errorPrefix string) ([]string, error) {
+	var gqlQuery graphql.SearchIssuesQuery
+	variables := graphql.BuildSearchIssuesVariables(graphql.SearchOptions{
+		Query: query,
+		First: 100,
+	})
+
+	err := s.client.Query(ctx, &gqlQuery, variables)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", errorPrefix, err)
+	}
+
+	var itemIDs []string
+	for _, node := range gqlQuery.Search.Nodes {
+		if node.Issue.ID != "" {
+			itemIDs = append(itemIDs, node.Issue.ID)
+		}
+	}
+
+	return itemIDs, nil
 }
 
 // ParseNumberRange parses number range string (e.g., "34-46") into item IDs

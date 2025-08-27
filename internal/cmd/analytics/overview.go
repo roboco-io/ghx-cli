@@ -88,8 +88,7 @@ func runOverview(ctx context.Context, opts *OverviewOptions) error {
 	analyticsService := service.NewAnalyticsService(client)
 
 	// Get project to validate access and get project ID
-	isOrg := false // TODO: Get this from flag properly
-	project, err := projectService.GetProject(ctx, owner, projectNumber, isOrg)
+	project, err := projectService.GetProjectWithOwnerDetection(ctx, owner, projectNumber)
 	if err != nil {
 		return fmt.Errorf("failed to get project: %w", err)
 	}

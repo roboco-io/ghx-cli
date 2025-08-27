@@ -669,26 +669,35 @@ func parseRepositoryString(repository string) []string {
 }
 
 // validateRepository validates that a repository exists
-func (s *ProjectService) validateRepository(_ context.Context, owner, name string) error {
-	// For now, this is a placeholder implementation
-	// In a real implementation, this would query the GitHub GraphQL API to verify
-	// the repository exists and is accessible
-	//
-	// The query would look like:
-	// query GetRepository($owner: String!, $name: String!) {
-	//   repository(owner: $owner, name: $name) {
-	//     id
-	//     name
-	//     owner { login }
-	//   }
-	// }
-
+func (s *ProjectService) validateRepository(ctx context.Context, owner, name string) error {
 	if owner == "" || name == "" {
 		return fmt.Errorf("invalid repository owner or name")
 	}
 
-	// Placeholder validation - in real implementation would check via GraphQL
-	fmt.Printf("Validating repository %s/%s...\n", owner, name)
+	// Query the repository to verify it exists and is accessible
+	var query graphql.RepositoryQuery
+	variables := graphql.BuildRepositoryVariables(owner, name)
+
+	err := s.client.Query(ctx, &query, variables)
+	if err != nil {
+		return fmt.Errorf("failed to query repository: %w", err)
+	}
+
+	// Parse the response
+	repoInfo, err := graphql.ParseRepositoryResponse(&query)
+	if err != nil {
+		return fmt.Errorf("failed to parse repository response: %w", err)
+	}
+
+	if repoInfo == nil {
+		return fmt.Errorf("repository %s/%s not found or not accessible", owner, name)
+	}
+
+	// Verify the repository details match
+	if repoInfo.Owner != owner || repoInfo.Name != name {
+		return fmt.Errorf("repository details mismatch: expected %s/%s, got %s/%s",
+			owner, name, repoInfo.Owner, repoInfo.Name)
+	}
 
 	return nil
 }
