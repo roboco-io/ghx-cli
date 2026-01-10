@@ -1,103 +1,71 @@
 # ghx-cli
 
-[![CI](https://github.com/roboco-io/ghx-cli/workflows/CI/badge.svg)](https://github.com/roboco-io/ghx-cli/actions)
-[![E2E Tests](https://github.com/roboco-io/ghx-cli/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/roboco-io/ghx-cli/actions/workflows/ci.yml)
+[![CI](https://github.com/roboco-io/ghx-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/roboco-io/ghx-cli/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/roboco-io/ghx-cli)](https://goreportcard.com/report/github.com/roboco-io/ghx-cli)
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> 🚧 **Work in Progress** - This tool is under active development. See [Issues](https://github.com/roboco-io/ghx-cli/issues) for current status and roadmap.
-
-**ghx-cli** (GitHub eXtensions) is a powerful command-line interface for GitHub features not fully supported by the official `gh` CLI. It provides complete control over GitHub Projects v2 and GitHub Discussions.
+**ghx-cli** (GitHub eXtensions) is a command-line interface for GitHub features not fully supported by the official `gh` CLI. It provides control over GitHub Projects v2 and GitHub Discussions through the GraphQL API.
 
 ## Why ghx-cli?
 
 The official GitHub CLI (`gh`) has limited support for several GitHub features:
 
-### GitHub Projects v2 (81% of features missing from `gh`)
-- ❌ **View Management** - No support for table, board, or roadmap views
-- ❌ **Automation Workflows** - No automation or workflow management
-- ❌ **Bulk Operations** - No batch processing capabilities
-- ❌ **Advanced Filtering** - Limited search and filtering options
-- ❌ **Reporting & Analytics** - No charts, statistics, or reports
+### GitHub Projects v2
+- **View Management** - No support for creating/managing table, board, or roadmap views
+- **Workflow Automation** - No workflow or automation management
+- **Bulk Operations** - No batch processing capabilities
+- **Field Management** - Limited custom field support
 
-### GitHub Discussions (No native support in `gh`)
-- ❌ **Discussion CRUD** - No create, list, view, edit, delete commands
-- ❌ **Comment Management** - No comment or reply support
-- ❌ **Answer Marking** - No Q&A answer management
-- ❌ **State Management** - No close, reopen, lock, unlock commands
-
-**ghx-cli fills these gaps** with comprehensive support for both features.
+### GitHub Discussions
+- **No native support** - `gh` doesn't provide discussion commands
+- **CRUD Operations** - Create, list, view, edit, delete discussions
+- **State Management** - Close, reopen, lock, unlock
+- **Comments & Answers** - Add comments, mark answers for Q&A
 
 ## Features
 
-### ✅ Current Features
+### Project Management (`ghx project`)
+- **Projects**: Create, list, view, edit, delete, export, import
+- **Templates**: Save and apply project templates
+- **Workflows**: Create automation rules with triggers and actions
+- **Repository Linking**: Link projects to repositories
 
-#### Core Project Management
-- **Projects**: Create, list, view, edit, and delete projects
-- **Authentication**: GitHub CLI integration with token-based authentication
-- **Cross-platform**: Support for macOS, Linux, and Windows
+### Item Management (`ghx item`)
+- **Items**: Add, list, view, edit, remove project items
+- **Item Types**: Issues, pull requests, and draft items
+- **Bulk Operations**: Add and update multiple items at once
 
-#### Item Management
-- **Items**: Add, list, view, edit, and remove project items
-- **Item Types**: Support for issues, pull requests, and draft items
-- **Advanced Search**: Search across GitHub repositories with filtering
+### Field Management (`ghx field`)
+- **Field Operations**: Create, list, update, delete custom fields
+- **Field Types**: Text, number, date, single/multi-select, iteration
+- **Field Options**: Add, update, delete select field options
 
-#### Field Management
-- **Field Operations**: Create, list, update, and delete custom fields
-- **Field Types**: Support for text, number, date, single/multi-select, and iteration fields
-- **Field Options**: Manage select field options (add, update, delete)
+### View Management (`ghx view`)
+- **View Operations**: Create, list, update, delete, copy views
+- **Layouts**: Table, board, and roadmap layouts
+- **Configuration**: Sort, group, and filter views
 
-#### View Management
-- **View Operations**: Create, list, update, delete, and copy project views
-- **View Layouts**: Support for table, board, and roadmap layouts
-- **View Configuration**: Sort and group views by custom fields
-- **View Filtering**: Apply filters to customize view content
+### Discussion Management (`ghx discussion`)
+- **Discussions**: List, view, create, edit, delete
+- **State**: Close, reopen, lock, unlock discussions
+- **Comments**: Add comments and replies
+- **Answers**: Mark/unmark comments as answers (Q&A)
+- **Categories**: List and filter by category
 
-#### Workflow Automation
-- **Workflows**: Create, list, update, delete, enable, and disable workflows
-- **Triggers**: Add triggers for automation (field changes, item events)
-- **Actions**: Add actions for automation (set field, move item, notify, assign, etc.)
-- **Action Types**: set-field, clear-field, move-to-column, archive-item, notify, assign, add-comment
-
-#### Analytics & Reporting
-- **Analytics**: Project overview and bulk operations
-- **Export**: Export project data in various formats
-- **Reporting**: Basic project statistics and insights
-
-#### Discussion Management
-- **Discussions**: List, view, create, edit, and delete discussions
-- **Comments**: Add comments and replies to discussions
-- **Answers**: Mark and unmark comments as answers (Q&A categories)
-- **State Management**: Close, reopen, lock, and unlock discussions
-- **Categories**: List and filter by discussion categories
-
-### 🚧 In Development (See [Issues](https://github.com/roboco-io/ghx-cli/issues))
-
-#### Phase 2: Enhanced Features - Q2 2024
-- [ ] Interactive TUI mode with Bubble Tea
-- [ ] Bulk import/export (CSV, JSON, Excel)
-- [ ] Advanced filtering and search operators
-- [ ] Iteration management and sprint planning
-
-#### Phase 3: Advanced Analytics - Q3 2024
-- [ ] Burndown and velocity charts
-- [ ] Custom report templates
-- [ ] Time tracking and reporting
-- [ ] Progress visualization
-
-#### Phase 4: Enterprise Features - Q4 2024
-- [ ] Cross-repository projects
-- [ ] 50,000+ item support
-- [ ] Backup and restore
-- [ ] Migration from Jira/Trello/Asana
-- [ ] Team collaboration features
+### Analytics (`ghx analytics`)
+- **Overview**: Project statistics and insights
+- **Export**: Export analytics data
+- **Bulk Update**: Batch field updates
 
 ## Installation
 
-### Homebrew (macOS/Linux)
+### From Source
 ```bash
-brew install ghx-cli
+git clone https://github.com/roboco-io/ghx-cli.git
+cd ghx-cli
+make build
+./bin/ghx --version
 ```
 
 ### Go Install
@@ -105,48 +73,42 @@ brew install ghx-cli
 go install github.com/roboco-io/ghx-cli/cmd/ghx@latest
 ```
 
-### Download Binary
-```bash
-curl -L https://github.com/roboco-io/ghx-cli/releases/latest/download/ghx-$(uname -s)-$(uname -m) -o ghx
-chmod +x ghx
-mv ghx /usr/local/bin/
-```
-
-### Docker
-```bash
-docker run --rm ghcr.io/roboco-io/ghx-cli:latest --help
-```
-
 ## Quick Start
 
 ```bash
 # Authentication - uses existing gh CLI tokens
-gh auth login  # First, authenticate with GitHub CLI
-ghx auth status  # Check authentication status (coming soon)
+gh auth login
+ghx auth status
 
-# Or use environment variables as fallback
+# Or use environment variable
 export GITHUB_TOKEN="your-github-token"
 
+# --- Projects ---
+
 # List projects
-ghx list --org myorg
-ghx list --user myuser
+ghx project list --org myorg
+ghx project list myuser
 
 # Create a project
-ghx create "My Project" --org myorg --description "Project description"
+ghx project create "My Project" --org myorg
 
 # View project details
-ghx view PROJECT_ID
+ghx project view myuser/123
 
 # Add items to project
 ghx item add PROJECT_ID --issue owner/repo#42
 ghx item add PROJECT_ID --pr owner/repo#43
-ghx item add PROJECT_ID --draft "Task title" --body "Task description"
+ghx item add PROJECT_ID --draft "Task title" --body "Description"
 
 # Manage fields
 ghx field create PROJECT_ID "Priority" --type single_select --options "High,Medium,Low"
 ghx field list PROJECT_ID
 
-# --- GitHub Discussions ---
+# Manage views
+ghx view create PROJECT_ID "Sprint Board" --layout board
+ghx view list PROJECT_ID
+
+# --- Discussions ---
 
 # List discussions
 ghx discussion list owner/repo
@@ -158,15 +120,13 @@ ghx discussion view owner/repo 123
 # Create a discussion
 ghx discussion create owner/repo --category general --title "Question" --body "How do I...?"
 
-# Manage discussion state
+# Manage state
 ghx discussion close owner/repo 123 --reason resolved
 ghx discussion reopen owner/repo 123
-ghx discussion lock owner/repo 123 --reason spam
+ghx discussion lock owner/repo 123
 
-# Add comments
-ghx discussion comment owner/repo 123 --body "Thanks for the answer!"
-
-# Mark answer (Q&A categories)
+# Comments and answers
+ghx discussion comment owner/repo 123 --body "Thanks!"
 ghx discussion answer owner/repo 123 --comment-id DC_xxx
 
 # List categories
@@ -186,46 +146,36 @@ org: "default-org"
 format: "table"  # table, json, yaml
 no-cache: false
 debug: false
-
-# Default limits
-limit: 50
 ```
 
 Environment variables:
-- `GHX_TOKEN` or `GITHUB_TOKEN` - GitHub Personal Access Token
+- `GITHUB_TOKEN` or `GH_TOKEN` - GitHub Personal Access Token (also uses `gh auth token`)
 - `GHX_ORG` - Default organization
-- `GHX_FORMAT` - Default output format (table, json, yaml)
+- `GHX_FORMAT` - Default output format
 - `GHX_DEBUG` - Enable debug output
-
-## Examples
-
-See [docs/examples.md](docs/examples.md) for comprehensive usage examples.
 
 ## Architecture
 
 ```mermaid
 graph TB
-    subgraph "CLI Layer"
+    subgraph CLI Layer
         Commands[Commands]
-        Flags[Flags]
     end
 
-    subgraph "Service Layer"
+    subgraph Service Layer
         ProjectService[Project Service]
         ItemService[Item Service]
         FieldService[Field Service]
         ViewService[View Service]
         DiscussionService[Discussion Service]
-        AutomationService[Automation Service]
     end
 
-    subgraph "Core Layer"
+    subgraph Core Layer
         AuthManager[Auth Manager]
-        ConfigManager[Config Manager]
     end
 
-    subgraph "API Layer"
-        GraphQLClient[GitHub GraphQL API Client]
+    subgraph API Layer
+        GraphQLClient[GraphQL Client]
     end
 
     Commands --> ProjectService
@@ -246,54 +196,52 @@ graph TB
 ```bash
 git clone https://github.com/roboco-io/ghx-cli.git
 cd ghx-cli
-make setup
+make build
 ```
+
+### Commands
+```bash
+make build          # Build binary to bin/ghx
+make install        # Install to GOPATH/bin
+make test           # Run all tests with coverage
+make test-unit      # Run unit tests only (short mode)
+make lint           # Run golangci-lint
+make fmt            # Format code
+```
+
+### Pre-commit Hooks
+
+This project uses [Lefthook](https://github.com/evilmartians/lefthook) for git hooks:
+
+- **pre-commit**: Format, lint, and unit tests
+- **pre-push**: Full test suite including E2E tests
+- **commit-msg**: Validate commit message format
+
+Commit message format: `type(scope): description`
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 
 ### Testing
 ```bash
-make test           # Run all tests
-make test-unit      # Unit tests only
-make coverage       # Generate coverage report
-make lint           # Run linter
+# Unit tests
+make test-unit
+
+# E2E tests (requires GitHub token with repo/project scopes)
+make test-e2e
+
+# All tests
+make test
 ```
 
-### Building
-```bash
-make build          # Build binary
-make install        # Install to GOPATH/bin
-```
+## Documentation
 
-### Contributing
-
-We welcome contributions! Please see:
-- [Contributing Guide](CONTRIBUTING.md)
-- [Development Setup](docs/DEVELOPMENT.md)
-- [Architecture Overview](docs/ARCHITECTURE.md)
-- [Open Issues](https://github.com/roboco-io/ghx-cli/issues)
-
-## Roadmap
-
-See our [detailed roadmap](docs/PRD.md#14-타임라인) and [feature comparison](docs/feature-comparison.md).
-
-## Support
-
-- 📖 [Documentation](docs/)
-- 🐛 [Bug Reports](https://github.com/roboco-io/ghx-cli/issues/new?template=bug_report.md)
-- 💡 [Feature Requests](https://github.com/roboco-io/ghx-cli/issues/new?template=feature_request.md)
-- 💬 [Discussions](https://github.com/roboco-io/ghx-cli/discussions)
+- [User Guide](docs/user-guide.md) - Comprehensive usage documentation
+- [Examples](docs/examples.md) - Usage examples
 
 ## License
 
-[MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
+[MIT License](LICENSE)
 
 ## Acknowledgments
 
-- GitHub team for the Projects v2 and Discussions APIs
-- [Charm](https://charm.sh/) for excellent TUI libraries
-- [spf13/cobra](https://github.com/spf13/cobra) for CLI framework
-- [shurcooL/graphql](https://github.com/shurcooL/graphql) for GraphQL client
-- All contributors and early adopters
-
----
-
-**Star ⭐ this repo if you find it useful!**
+- [spf13/cobra](https://github.com/spf13/cobra) - CLI framework
+- [shurcooL/graphql](https://github.com/shurcooL/graphql) - GraphQL client
