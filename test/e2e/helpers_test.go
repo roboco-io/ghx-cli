@@ -17,8 +17,7 @@ const (
 	envSkipE2E   = "GHX_SKIP_E2E"   // Set to "1" to skip E2E tests
 
 	// Default test repository (can be overridden via env)
-	// Note: Uses gh-project-cli (actual repo name) until GitHub repo is renamed
-	defaultTestRepo = "roboco-io/gh-project-cli"
+	defaultTestRepo = "roboco-io/ghx-cli"
 
 	// Timeouts
 	commandTimeout = 30 * time.Second
