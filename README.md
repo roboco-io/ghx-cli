@@ -234,8 +234,11 @@ make test
 
 ## Documentation
 
-- [User Guide](docs/user-guide.md) - Comprehensive usage documentation
+- [Documentation](docs/README.md) - Complete documentation index
+- [Getting Started](docs/getting-started.md) - Installation and quick start
+- [Command Reference](docs/commands/README.md) - All commands
 - [Examples](docs/examples.md) - Usage examples
+- [Troubleshooting](docs/troubleshooting.md) - Common issues
 
 ## License
 
