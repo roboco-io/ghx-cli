@@ -1,12 +1,42 @@
 package graphql
 
-import "time"
+import (
+	"time"
+
+	gql "github.com/shurcooL/graphql"
+)
 
 // =============================================================================
 // DATA TYPES
 // =============================================================================
 
-// Discussion represents a GitHub Discussion
+// DiscussionSummary represents a GitHub Discussion for list queries (no comment details)
+type DiscussionSummary struct {
+	CreatedAt      time.Time          `graphql:"createdAt"`
+	UpdatedAt      time.Time          `graphql:"updatedAt"`
+	ClosedAt       *time.Time         `graphql:"closedAt"`
+	AnswerChosenAt *time.Time         `graphql:"answerChosenAt"`
+	Author         DiscussionActor    `graphql:"author"`
+	Category       DiscussionCategory `graphql:"category"`
+	Answer         *DiscussionComment `graphql:"answer"`
+	Comments       struct {
+		TotalCount int `graphql:"totalCount"`
+	} `graphql:"comments"`
+	Labels struct {
+		Nodes []DiscussionLabel `graphql:"nodes"`
+	} `graphql:"labels(first: 10)"`
+	ID          string `graphql:"id"`
+	Title       string `graphql:"title"`
+	Body        string `graphql:"body"`
+	BodyHTML    string `graphql:"bodyHTML"`
+	URL         string `graphql:"url"`
+	Number      int    `graphql:"number"`
+	UpvoteCount int    `graphql:"upvoteCount"`
+	Locked      bool   `graphql:"locked"`
+	Closed      bool   `graphql:"closed"`
+}
+
+// Discussion represents a GitHub Discussion with comments (for detail queries)
 type Discussion struct {
 	CreatedAt      time.Time          `graphql:"createdAt"`
 	UpdatedAt      time.Time          `graphql:"updatedAt"`
@@ -118,9 +148,9 @@ const (
 type ListDiscussionsQuery struct {
 	Repository struct {
 		Discussions struct {
-			PageInfo   PageInfo     `graphql:"pageInfo"`
-			Nodes      []Discussion `graphql:"nodes"`
-			TotalCount int          `graphql:"totalCount"`
+			PageInfo   PageInfo            `graphql:"pageInfo"`
+			Nodes      []DiscussionSummary `graphql:"nodes"`
+			TotalCount int                 `graphql:"totalCount"`
 		} `graphql:"discussions(first: $first, after: $after, categoryId: $categoryId, answered: $answered)"`
 	} `graphql:"repository(owner: $owner, name: $name)"`
 }
@@ -250,73 +280,73 @@ type UnmarkDiscussionCommentAsAnswerMutation struct {
 
 // CreateDiscussionInput represents input for creating a discussion
 type CreateDiscussionInput struct {
-	RepositoryID string `json:"repositoryId"`
-	CategoryID   string `json:"categoryId"`
-	Title        string `json:"title"`
-	Body         string `json:"body"`
+	RepositoryID gql.ID     `json:"repositoryId"`
+	CategoryID   gql.ID     `json:"categoryId"`
+	Title        gql.String `json:"title"`
+	Body         gql.String `json:"body"`
 }
 
 // UpdateDiscussionInput represents input for updating a discussion
 type UpdateDiscussionInput struct {
-	Title        *string `json:"title,omitempty"`
-	Body         *string `json:"body,omitempty"`
-	CategoryID   *string `json:"categoryId,omitempty"`
-	DiscussionID string  `json:"discussionId"`
+	Title        *gql.String `json:"title,omitempty"`
+	Body         *gql.String `json:"body,omitempty"`
+	CategoryID   *gql.ID     `json:"categoryId,omitempty"`
+	DiscussionID gql.ID      `json:"discussionId"`
 }
 
 // DeleteDiscussionInput represents input for deleting a discussion
 type DeleteDiscussionInput struct {
-	ID string `json:"id"`
+	ID gql.ID `json:"id"`
 }
 
 // CloseDiscussionInput represents input for closing a discussion
 type CloseDiscussionInput struct {
 	Reason       DiscussionCloseReason `json:"reason"`
-	DiscussionID string                `json:"discussionId"`
+	DiscussionID gql.ID                `json:"discussionId"`
 }
 
 // ReopenDiscussionInput represents input for reopening a discussion
 type ReopenDiscussionInput struct {
-	DiscussionID string `json:"discussionId"`
+	DiscussionID gql.ID `json:"discussionId"`
 }
 
-// LockDiscussionInput represents input for locking a discussion
-type LockDiscussionInput struct {
+// LockLockableInput represents input for locking a lockable (discussion)
+type LockLockableInput struct {
 	LockReason *DiscussionLockReason `json:"lockReason,omitempty"`
-	LockableID string                `json:"lockableId"`
+	LockableID gql.ID                `json:"lockableId"`
 }
 
-// UnlockDiscussionInput represents input for unlocking a discussion
-type UnlockDiscussionInput struct {
-	LockableID string `json:"lockableId"`
+// UnlockLockableInput represents input for unlocking a lockable (discussion)
+type UnlockLockableInput struct {
+	LockableID gql.ID `json:"lockableId"`
 }
 
 // AddDiscussionCommentInput represents input for adding a comment
 type AddDiscussionCommentInput struct {
-	ReplyToID    *string `json:"replyToId,omitempty"`
-	DiscussionID string  `json:"discussionId"`
-	Body         string  `json:"body"`
+	ReplyToID    *gql.ID    `json:"replyToId,omitempty"`
+	DiscussionID gql.ID     `json:"discussionId"`
+	Body         gql.String `json:"body"`
 }
 
 // UpdateDiscussionCommentInput represents input for updating a comment
 type UpdateDiscussionCommentInput struct {
-	CommentID string `json:"commentId"`
-	Body      string `json:"body"`
+	CommentID gql.ID     `json:"commentId"`
+	Body      gql.String `json:"body"`
 }
 
 // DeleteDiscussionCommentInput represents input for deleting a comment
 type DeleteDiscussionCommentInput struct {
-	ID string `json:"id"`
+	ID gql.ID `json:"id"`
 }
 
 // MarkDiscussionCommentAsAnswerInput represents input for marking answer
 type MarkDiscussionCommentAsAnswerInput struct {
-	ID string `json:"id"`
+	ID gql.ID `json:"id"`
 }
 
 // UnmarkDiscussionCommentAsAnswerInput represents input for unmarking answer
 type UnmarkDiscussionCommentAsAnswerInput struct {
-	ID string `json:"id"`
+	ID gql.ID `json:"id"`
 }
 
 // =============================================================================
@@ -326,19 +356,24 @@ type UnmarkDiscussionCommentAsAnswerInput struct {
 // BuildListDiscussionsVariables builds variables for listing discussions
 func BuildListDiscussionsVariables(owner, name string, first int, after, categoryID *string, answered *bool) map[string]interface{} {
 	vars := map[string]interface{}{
-		"owner":        owner,
-		"name":         name,
-		"first":        first,
-		"commentFirst": 0,
+		"owner": gql.String(owner),
+		"name":  gql.String(name),
+		"first": gql.Int(first), //nolint:gosec // first is always within int32 range
 	}
 	if after != nil {
-		vars["after"] = *after
+		vars["after"] = gql.String(*after)
+	} else {
+		vars["after"] = (*gql.String)(nil)
 	}
 	if categoryID != nil {
-		vars["categoryId"] = *categoryID
+		vars["categoryId"] = gql.ID(*categoryID)
+	} else {
+		vars["categoryId"] = (*gql.ID)(nil)
 	}
 	if answered != nil {
-		vars["answered"] = *answered
+		vars["answered"] = gql.Boolean(*answered)
+	} else {
+		vars["answered"] = (*gql.Boolean)(nil)
 	}
 	return vars
 }
@@ -346,135 +381,122 @@ func BuildListDiscussionsVariables(owner, name string, first int, after, categor
 // BuildGetDiscussionVariables builds variables for getting a discussion
 func BuildGetDiscussionVariables(owner, name string, number, commentFirst int) map[string]interface{} {
 	return map[string]interface{}{
-		"owner":        owner,
-		"name":         name,
-		"number":       number,
-		"commentFirst": commentFirst,
+		"owner":        gql.String(owner),
+		"name":         gql.String(name),
+		"number":       gql.Int(number),       //nolint:gosec // number is always within int32 range
+		"commentFirst": gql.Int(commentFirst), //nolint:gosec // commentFirst is always within int32 range
 	}
 }
 
 // BuildListDiscussionCategoriesVariables builds variables for listing categories
 func BuildListDiscussionCategoriesVariables(owner, name string) map[string]interface{} {
 	return map[string]interface{}{
-		"owner": owner,
-		"name":  name,
+		"owner": gql.String(owner),
+		"name":  gql.String(name),
 	}
 }
 
 // BuildGetDiscussionCategoryVariables builds variables for getting a category
 func BuildGetDiscussionCategoryVariables(owner, name, slug string) map[string]interface{} {
 	return map[string]interface{}{
-		"owner": owner,
-		"name":  name,
-		"slug":  slug,
+		"owner": gql.String(owner),
+		"name":  gql.String(name),
+		"slug":  gql.String(slug),
 	}
 }
 
 // BuildCreateDiscussionVariables builds variables for creating a discussion
 func BuildCreateDiscussionVariables(input *CreateDiscussionInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"repositoryId": input.RepositoryID,
-			"categoryId":   input.CategoryID,
-			"title":        input.Title,
-			"body":         input.Body,
+		"input": CreateDiscussionInput{
+			RepositoryID: input.RepositoryID,
+			CategoryID:   input.CategoryID,
+			Title:        input.Title,
+			Body:         input.Body,
 		},
-		"commentFirst": 0,
+		"commentFirst": gql.Int(0),
 	}
 }
 
 // BuildUpdateDiscussionVariables builds variables for updating a discussion
 func BuildUpdateDiscussionVariables(input *UpdateDiscussionInput) map[string]interface{} {
-	inputMap := map[string]interface{}{
-		"discussionId": input.DiscussionID,
-	}
-	if input.Title != nil {
-		inputMap["title"] = *input.Title
-	}
-	if input.Body != nil {
-		inputMap["body"] = *input.Body
-	}
-	if input.CategoryID != nil {
-		inputMap["categoryId"] = *input.CategoryID
-	}
 	return map[string]interface{}{
-		"input":        inputMap,
-		"commentFirst": 0,
+		"input":        *input,
+		"commentFirst": gql.Int(0),
 	}
 }
 
 // BuildDeleteDiscussionVariables builds variables for deleting a discussion
 func BuildDeleteDiscussionVariables(id string) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"id": id,
-		},
+		"input": DeleteDiscussionInput{ID: gql.ID(id)},
 	}
 }
 
 // BuildCloseDiscussionVariables builds variables for closing a discussion
 func BuildCloseDiscussionVariables(discussionID string, reason DiscussionCloseReason) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"discussionId": discussionID,
-			"reason":       reason,
+		"input": CloseDiscussionInput{
+			DiscussionID: gql.ID(discussionID),
+			Reason:       reason,
 		},
-		"commentFirst": 0,
+		"commentFirst": gql.Int(0),
 	}
 }
 
 // BuildReopenDiscussionVariables builds variables for reopening a discussion
 func BuildReopenDiscussionVariables(discussionID string) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"discussionId": discussionID,
+		"input": ReopenDiscussionInput{
+			DiscussionID: gql.ID(discussionID),
 		},
-		"commentFirst": 0,
+		"commentFirst": gql.Int(0),
 	}
 }
 
 // BuildLockDiscussionVariables builds variables for locking a discussion
 func BuildLockDiscussionVariables(lockableID string, reason *DiscussionLockReason) map[string]interface{} {
-	inputMap := map[string]interface{}{
-		"lockableId": lockableID,
+	input := LockLockableInput{
+		LockableID: gql.ID(lockableID),
 	}
 	if reason != nil {
-		inputMap["lockReason"] = *reason
+		input.LockReason = reason
 	}
 	return map[string]interface{}{
-		"input": inputMap,
+		"input": input,
 	}
 }
 
 // BuildUnlockDiscussionVariables builds variables for unlocking a discussion
 func BuildUnlockDiscussionVariables(lockableID string) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"lockableId": lockableID,
+		"input": UnlockLockableInput{
+			LockableID: gql.ID(lockableID),
 		},
 	}
 }
 
 // BuildAddDiscussionCommentVariables builds variables for adding a comment
 func BuildAddDiscussionCommentVariables(discussionID, body string, replyToID *string) map[string]interface{} {
-	inputMap := map[string]interface{}{
-		"discussionId": discussionID,
-		"body":         body,
+	input := AddDiscussionCommentInput{
+		DiscussionID: gql.ID(discussionID),
+		Body:         gql.String(body),
 	}
 	if replyToID != nil {
-		inputMap["replyToId"] = *replyToID
+		id := gql.ID(*replyToID)
+		input.ReplyToID = &id
 	}
 	return map[string]interface{}{
-		"input": inputMap,
+		"input": input,
 	}
 }
 
 // BuildUpdateDiscussionCommentVariables builds variables for updating a comment
 func BuildUpdateDiscussionCommentVariables(commentID, body string) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"commentId": commentID,
-			"body":      body,
+		"input": UpdateDiscussionCommentInput{
+			CommentID: gql.ID(commentID),
+			Body:      gql.String(body),
 		},
 	}
 }
@@ -482,8 +504,8 @@ func BuildUpdateDiscussionCommentVariables(commentID, body string) map[string]in
 // BuildDeleteDiscussionCommentVariables builds variables for deleting a comment
 func BuildDeleteDiscussionCommentVariables(id string) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"id": id,
+		"input": DeleteDiscussionCommentInput{
+			ID: gql.ID(id),
 		},
 	}
 }
@@ -491,20 +513,20 @@ func BuildDeleteDiscussionCommentVariables(id string) map[string]interface{} {
 // BuildMarkAnswerVariables builds variables for marking an answer
 func BuildMarkAnswerVariables(commentID string) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"id": commentID,
+		"input": MarkDiscussionCommentAsAnswerInput{
+			ID: gql.ID(commentID),
 		},
-		"commentFirst": 0,
+		"commentFirst": gql.Int(0),
 	}
 }
 
 // BuildUnmarkAnswerVariables builds variables for unmarking an answer
 func BuildUnmarkAnswerVariables(commentID string) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"id": commentID,
+		"input": UnmarkDiscussionCommentAsAnswerInput{
+			ID: gql.ID(commentID),
 		},
-		"commentFirst": 0,
+		"commentFirst": gql.Int(0),
 	}
 }
 

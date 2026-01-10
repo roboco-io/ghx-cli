@@ -59,14 +59,33 @@ pre-commit:
 pre-push:
   parallel: false
   commands:
-    test-all:
-      run: make test
-    
-    lint-all:
-      run: golangci-lint run ./...
-    
     build:
       run: make build
+      fail_text: |
+        Build failed! Fix compilation errors before pushing.
+
+    lint-all:
+      run: golangci-lint run ./...
+      fail_text: |
+        Linting failed! Fix the issues before pushing.
+
+    test-all:
+      run: make test
+      fail_text: |
+        Unit tests failed! Fix the failing tests before pushing.
+
+    # E2E tests - run by default, skip with GHP_SKIP_E2E=1
+    test-e2e:
+      run: |
+        if [ "${GHP_SKIP_E2E:-0}" = "1" ]; then
+          echo "Skipping E2E tests (GHP_SKIP_E2E=1)"
+          exit 0
+        fi
+        echo "Running E2E tests..."
+        make test-e2e
+      fail_text: |
+        E2E tests failed! Fix the issues before pushing.
+        To skip E2E tests, run: GHP_SKIP_E2E=1 git push
 
 commit-msg:
   commands:

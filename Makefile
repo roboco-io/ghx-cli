@@ -22,7 +22,7 @@ LDFLAGS := -ldflags "-X main.Version=$(VERSION) -X main.Commit=$(COMMIT) -X main
 TEST_FLAGS ?= -v -race -coverprofile=coverage.out
 TEST_TIMEOUT ?= 10m
 
-.PHONY: all build clean test coverage fmt lint install deps help
+.PHONY: all build clean test test-unit test-integration test-e2e test-e2e-write coverage fmt lint install deps help
 
 ## help: Show this help message
 help:
@@ -58,6 +58,22 @@ test-unit:
 test-integration:
 	@echo "Running integration tests..."
 	$(GOTEST) $(TEST_FLAGS) -run Integration -timeout $(TEST_TIMEOUT) ./test/...
+
+## test-e2e: Run E2E tests (requires GITHUB_TOKEN or gh auth)
+test-e2e: build
+	@echo "Running E2E tests..."
+	@echo "Note: Set GHP_TEST_REPO=owner/repo to use a different test repository"
+	$(GOTEST) -v -timeout $(TEST_TIMEOUT) ./test/e2e/...
+
+## test-e2e-write: Run E2E tests including write operations (creates/deletes discussions)
+test-e2e-write: build
+	@echo "Running E2E tests with write operations..."
+	@echo "WARNING: This will create and delete discussions in the test repository"
+	GHP_E2E_WRITE_TESTS=1 $(GOTEST) -v -timeout $(TEST_TIMEOUT) ./test/e2e/...
+
+## test-all: Run all tests (unit, integration, e2e)
+test-all: test test-e2e
+	@echo "All tests completed"
 
 ## coverage: Generate test coverage report
 coverage: test

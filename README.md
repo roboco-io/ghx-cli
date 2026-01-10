@@ -1,7 +1,9 @@
 # ghp-cli
 
 [![CI](https://github.com/roboco-io/gh-project-cli/workflows/CI/badge.svg)](https://github.com/roboco-io/gh-project-cli/actions)
+[![E2E Tests](https://github.com/roboco-io/gh-project-cli/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/roboco-io/gh-project-cli/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/roboco-io/gh-project-cli)](https://goreportcard.com/report/github.com/roboco-io/gh-project-cli)
+[![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > 🚧 **Work in Progress** - This tool is under active development. See [Issues](https://github.com/roboco-io/gh-project-cli/issues) for current status and roadmap.

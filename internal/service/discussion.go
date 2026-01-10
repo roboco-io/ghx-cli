@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	gql "github.com/shurcooL/graphql"
+
 	"github.com/roboco-io/gh-project-cli/internal/api"
 	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
 )
@@ -258,10 +260,10 @@ func (s *DiscussionService) CreateDiscussion(ctx context.Context, opts CreateDis
 	}
 
 	variables := graphql.BuildCreateDiscussionVariables(&graphql.CreateDiscussionInput{
-		RepositoryID: repoInfo.ID,
-		CategoryID:   cat.ID,
-		Title:        opts.Title,
-		Body:         opts.Body,
+		RepositoryID: gql.ID(repoInfo.ID),
+		CategoryID:   gql.ID(cat.ID),
+		Title:        gql.String(opts.Title),
+		Body:         gql.String(opts.Body),
 	})
 
 	var mutation graphql.CreateDiscussionMutation
@@ -282,9 +284,17 @@ func (s *DiscussionService) UpdateDiscussion(ctx context.Context, opts UpdateDis
 	}
 
 	input := &graphql.UpdateDiscussionInput{
-		DiscussionID: discussion.ID,
-		Title:        opts.Title,
-		Body:         opts.Body,
+		DiscussionID: gql.ID(discussion.ID),
+	}
+
+	// Convert optional fields
+	if opts.Title != nil {
+		title := gql.String(*opts.Title)
+		input.Title = &title
+	}
+	if opts.Body != nil {
+		body := gql.String(*opts.Body)
+		input.Body = &body
 	}
 
 	// Get category ID if changing category
@@ -296,7 +306,8 @@ func (s *DiscussionService) UpdateDiscussion(ctx context.Context, opts UpdateDis
 		if cat == nil {
 			return nil, fmt.Errorf("category not found: %s", *opts.Category)
 		}
-		input.CategoryID = &cat.ID
+		catID := gql.ID(cat.ID)
+		input.CategoryID = &catID
 	}
 
 	variables := graphql.BuildUpdateDiscussionVariables(input)
@@ -467,14 +478,47 @@ func (s *DiscussionService) getRepositoryInfo(ctx context.Context, owner, name s
 	return graphql.ParseRepositoryResponse(&query)
 }
 
-func convertDiscussionNodes(nodes []graphql.Discussion) []DiscussionInfo {
+func convertDiscussionNodes(nodes []graphql.DiscussionSummary) []DiscussionInfo {
 	discussions := make([]DiscussionInfo, len(nodes))
 	for i := range nodes {
-		discussions[i] = convertDiscussion(&nodes[i])
+		discussions[i] = convertDiscussionSummary(&nodes[i])
 	}
 	return discussions
 }
 
+//nolint:dupl // DiscussionSummary and Discussion have same structure but different types
+func convertDiscussionSummary(d *graphql.DiscussionSummary) DiscussionInfo {
+	state := "OPEN"
+	if d.Closed {
+		state = "CLOSED"
+	}
+
+	labels := make([]string, 0, len(d.Labels.Nodes))
+	for _, l := range d.Labels.Nodes {
+		labels = append(labels, l.Name)
+	}
+
+	return DiscussionInfo{
+		ID:           d.ID,
+		Number:       d.Number,
+		Title:        d.Title,
+		Body:         d.Body,
+		URL:          d.URL,
+		State:        state,
+		Locked:       d.Locked,
+		Category:     d.Category.Name,
+		CategorySlug: d.Category.Slug,
+		Author:       d.Author.Login,
+		CreatedAt:    d.CreatedAt,
+		UpdatedAt:    d.UpdatedAt,
+		CommentCount: d.Comments.TotalCount,
+		UpvoteCount:  d.UpvoteCount,
+		HasAnswer:    d.Answer != nil,
+		Labels:       labels,
+	}
+}
+
+//nolint:dupl // DiscussionSummary and Discussion have same structure but different types
 func convertDiscussion(d *graphql.Discussion) DiscussionInfo {
 	state := "OPEN"
 	if d.Closed {
