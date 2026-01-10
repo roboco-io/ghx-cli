@@ -49,7 +49,7 @@ func TestRootCommand(t *testing.T) {
 		require.NoError(t, err)
 
 		output := buf.String()
-		assert.Contains(t, output, "command-line interface for managing GitHub Projects")
+		assert.Contains(t, output, "command-line interface for GitHub features")
 		assert.Contains(t, output, "ghp")
 	})
 

@@ -153,6 +153,9 @@ issues:
     - path: cmd/
       linters:
         - gochecknoinits
+    - path: internal/cmd/
+      linters:
+        - dupl
     - linters:
         - lll
       source: "^//go:generate "

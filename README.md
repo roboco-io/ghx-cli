@@ -6,19 +6,26 @@
 
 > 🚧 **Work in Progress** - This tool is under active development. See [Issues](https://github.com/roboco-io/gh-project-cli/issues) for current status and roadmap.
 
-**ghp-cli** is a powerful command-line interface for managing GitHub Projects v2. It provides complete control over GitHub Projects features that are missing or limited in the official `gh` CLI.
+**ghp-cli** is a powerful command-line interface for GitHub features not fully supported by the official `gh` CLI. It provides complete control over GitHub Projects v2 and GitHub Discussions.
 
 ## Why ghp-cli?
 
-The official GitHub CLI (`gh`) has limited support for GitHub Projects v2. Our analysis shows that **81% of GitHub Projects features are missing** from `gh`, including:
+The official GitHub CLI (`gh`) has limited support for several GitHub features:
 
+### GitHub Projects v2 (81% of features missing from `gh`)
 - ❌ **View Management** - No support for table, board, or roadmap views
 - ❌ **Automation Workflows** - No automation or workflow management
-- ❌ **Bulk Operations** - No batch processing capabilities  
+- ❌ **Bulk Operations** - No batch processing capabilities
 - ❌ **Advanced Filtering** - Limited search and filtering options
 - ❌ **Reporting & Analytics** - No charts, statistics, or reports
 
-**ghp-cli fills these gaps** with comprehensive GitHub Projects support.
+### GitHub Discussions (No native support in `gh`)
+- ❌ **Discussion CRUD** - No create, list, view, edit, delete commands
+- ❌ **Comment Management** - No comment or reply support
+- ❌ **Answer Marking** - No Q&A answer management
+- ❌ **State Management** - No close, reopen, lock, unlock commands
+
+**ghp-cli fills these gaps** with comprehensive support for both features.
 
 ## Features
 
@@ -55,6 +62,13 @@ The official GitHub CLI (`gh`) has limited support for GitHub Projects v2. Our a
 - **Analytics**: Project overview and bulk operations
 - **Export**: Export project data in various formats
 - **Reporting**: Basic project statistics and insights
+
+#### Discussion Management
+- **Discussions**: List, view, create, edit, and delete discussions
+- **Comments**: Add comments and replies to discussions
+- **Answers**: Mark and unmark comments as answers (Q&A categories)
+- **State Management**: Close, reopen, lock, and unlock discussions
+- **Categories**: List and filter by discussion categories
 
 ### 🚧 In Development (See [Issues](https://github.com/roboco-io/gh-project-cli/issues))
 
@@ -130,13 +144,31 @@ ghp item add PROJECT_ID --draft "Task title" --body "Task description"
 ghp field create PROJECT_ID "Priority" --type single_select --options "High,Medium,Low"
 ghp field list PROJECT_ID
 
-# Bulk operations (coming soon)
-ghp bulk import PROJECT_ID --file data.csv
-ghp bulk export PROJECT_ID --format json --output project-data.json
+# --- GitHub Discussions ---
 
-# Generate reports (coming soon)
-ghp report burndown PROJECT_ID --sprint current
-ghp stats PROJECT_ID --period 30d
+# List discussions
+ghp discussion list owner/repo
+ghp discussion list owner/repo --category ideas --state open
+
+# View a discussion
+ghp discussion view owner/repo 123
+
+# Create a discussion
+ghp discussion create owner/repo --category general --title "Question" --body "How do I...?"
+
+# Manage discussion state
+ghp discussion close owner/repo 123 --reason resolved
+ghp discussion reopen owner/repo 123
+ghp discussion lock owner/repo 123 --reason spam
+
+# Add comments
+ghp discussion comment owner/repo 123 --body "Thanks for the answer!"
+
+# Mark answer (Q&A categories)
+ghp discussion answer owner/repo 123 --comment-id DC_xxx
+
+# List categories
+ghp discussion category list owner/repo
 ```
 
 ## Configuration
@@ -173,31 +205,31 @@ See [docs/examples.md](docs/examples.md) for comprehensive usage examples.
 graph TB
     subgraph "CLI Layer"
         Commands[Commands]
-        Flags[Flags]  
-        Interactive[Interactive Mode]
+        Flags[Flags]
     end
-    
+
     subgraph "Service Layer"
         ProjectService[Project Service]
         ItemService[Item Service]
         FieldService[Field Service]
         ViewService[View Service]
+        DiscussionService[Discussion Service]
         AutomationService[Automation Service]
-        ReportService[Report Service]
     end
-    
+
     subgraph "Core Layer"
         AuthManager[Auth Manager]
-        CacheManager[Cache Manager]
         ConfigManager[Config Manager]
     end
-    
+
     subgraph "API Layer"
         GraphQLClient[GitHub GraphQL API Client]
     end
-    
+
     Commands --> ProjectService
+    Commands --> DiscussionService
     ProjectService --> AuthManager
+    DiscussionService --> AuthManager
     AuthManager --> GraphQLClient
 ```
 
@@ -254,9 +286,10 @@ See our [detailed roadmap](docs/PRD.md#14-타임라인) and [feature comparison]
 
 ## Acknowledgments
 
-- GitHub team for the Projects v2 API
+- GitHub team for the Projects v2 and Discussions APIs
 - [Charm](https://charm.sh/) for excellent TUI libraries
 - [spf13/cobra](https://github.com/spf13/cobra) for CLI framework
+- [shurcooL/graphql](https://github.com/shurcooL/graphql) for GraphQL client
 - All contributors and early adopters
 
 ---

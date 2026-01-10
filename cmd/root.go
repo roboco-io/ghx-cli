@@ -9,6 +9,7 @@ import (
 
 	"github.com/roboco-io/gh-project-cli/internal/cmd/analytics"
 	"github.com/roboco-io/gh-project-cli/internal/cmd/auth"
+	"github.com/roboco-io/gh-project-cli/internal/cmd/discussion"
 	"github.com/roboco-io/gh-project-cli/internal/cmd/field"
 	"github.com/roboco-io/gh-project-cli/internal/cmd/item"
 	"github.com/roboco-io/gh-project-cli/internal/cmd/project"
@@ -33,14 +34,15 @@ func init() {
 func NewRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "ghp",
-		Short: "GitHub Projects CLI - Powerful command-line tool for GitHub Projects",
-		Long: `ghp-cli is a powerful command-line interface for managing GitHub Projects.
-		
-It provides complete control over GitHub Projects features including:
+		Short: "GitHub CLI Extension - Projects, Discussions, and more",
+		Long: `ghp-cli is a powerful command-line interface for GitHub features not covered by gh CLI.
+
+It provides complete control over GitHub features including:
 - Project management (create, list, edit, delete)
 - Item management (add, update, archive)
 - Field management (create custom fields)
 - View management (table, board, roadmap)
+- Discussion management (create, comment, answer)
 - Automation workflows
 - Reporting and analytics
 - Bulk operations
@@ -48,7 +50,8 @@ It provides complete control over GitHub Projects features including:
 Example:
   ghp project list --org myorg
   ghp project view owner/123
-  ghp project create "My Project"`,
+  ghp discussion list owner/repo
+  ghp discussion create owner/repo --category ideas`,
 		Version: fmt.Sprintf("%s (commit: %s, built: %s)", version, commit, buildTime),
 	}
 
@@ -72,6 +75,7 @@ Example:
 	// Add subcommands
 	cmd.AddCommand(analytics.NewAnalyticsCmd())
 	cmd.AddCommand(auth.NewAuthCmd())
+	cmd.AddCommand(discussion.NewDiscussionCmd())
 	cmd.AddCommand(field.NewFieldCmd())
 	cmd.AddCommand(item.NewItemCmd())
 	cmd.AddCommand(project.NewProjectCmd())
