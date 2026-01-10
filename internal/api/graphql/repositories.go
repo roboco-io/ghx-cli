@@ -1,5 +1,9 @@
 package graphql
 
+import (
+	gql "github.com/shurcooL/graphql"
+)
+
 // Repository queries and mutations
 
 // RepositoryQuery represents the repository query structure
@@ -39,8 +43,8 @@ type RepositoryInfo struct {
 // BuildRepositoryVariables builds variables for repository queries
 func BuildRepositoryVariables(owner, name string) map[string]interface{} {
 	return map[string]interface{}{
-		"owner": owner,
-		"name":  name,
+		"owner": gql.String(owner),
+		"name":  gql.String(name),
 	}
 }
 

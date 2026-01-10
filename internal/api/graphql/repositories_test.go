@@ -3,6 +3,7 @@ package graphql
 import (
 	"testing"
 
+	gql "github.com/shurcooL/graphql"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,8 +19,8 @@ func TestRepositoryVariableBuilders(t *testing.T) {
 		variables := BuildRepositoryVariables("octocat", "Hello-World")
 
 		assert.NotNil(t, variables)
-		assert.Equal(t, "octocat", variables["owner"])
-		assert.Equal(t, "Hello-World", variables["name"])
+		assert.Equal(t, gql.String("octocat"), variables["owner"])
+		assert.Equal(t, gql.String("Hello-World"), variables["name"])
 	})
 }
 
