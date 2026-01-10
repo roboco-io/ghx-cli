@@ -63,49 +63,13 @@ jobs:
         version: v1.62.2
         args: --timeout=5m
 
-  e2e:
-    name: E2E Test
-    runs-on: ubuntu-latest
-    needs: [test, lint]
-    permissions:
-      contents: read
-      discussions: read
-
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v4
-
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: ${{ env.GO_VERSION }}
-
-    - name: Cache Go modules
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cache/go-build
-          ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ env.GO_VERSION }}-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-${{ env.GO_VERSION }}-
-
-    - name: Download dependencies
-      run: go mod download
-
-    - name: Build binary
-      run: make build
-
-    - name: Run E2E tests
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GHX_TEST_REPO: ${{ github.repository }}
-      run: make test-e2e
+  # E2E tests are run locally via lefthook pre-push hook
+  # GitHub Actions GITHUB_TOKEN lacks required OAuth scopes for GraphQL API
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [test, lint, e2e]
+    needs: [test, lint]
 
     steps:
     - name: Check out code
