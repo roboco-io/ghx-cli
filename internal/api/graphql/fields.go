@@ -1,18 +1,9 @@
 package graphql
 
 import (
-	"strconv"
-	"strings"
 	"time"
-)
 
-const (
-	// defaultIterationDays is the default duration for iterations in days
-	defaultIterationDays = 14
-	// daysPerWeek is the number of days in a week
-	daysPerWeek = 7
-	// daysPerMonth is an approximate number of days per month
-	daysPerMonth = 30
+	gql "github.com/shurcooL/graphql"
 )
 
 // Field creation mutations and queries
@@ -60,135 +51,95 @@ type DeleteSingleSelectFieldOptionMutation struct {
 }
 
 // Field input types
+
+// CreateFieldInput represents input for creating a field
 type CreateFieldInput struct {
-	ProjectID           string                 `json:"projectId"`
-	Name                string                 `json:"name"`
+	ProjectID           gql.ID                 `json:"projectId"`
+	Name                gql.String             `json:"name"`
 	DataType            ProjectV2FieldDataType `json:"dataType"`
-	SingleSelectOptions []string               `json:"singleSelectOptions,omitempty"`
-	Duration            string                 `json:"duration,omitempty"`
+	SingleSelectOptions []SingleSelectOption   `json:"singleSelectOptions,omitempty"`
 }
 
+// SingleSelectOption represents a single select option for field creation
+type SingleSelectOption struct {
+	Name        gql.String  `json:"name"`
+	Color       gql.String  `json:"color"`
+	Description *gql.String `json:"description,omitempty"`
+}
+
+// UpdateFieldInput represents input for updating a field
 type UpdateFieldInput struct {
-	Name    *string `json:"name,omitempty"`
-	FieldID string  `json:"fieldId"`
+	Name    *gql.String `json:"name,omitempty"`
+	FieldID gql.ID      `json:"fieldId"`
 }
 
+// DeleteFieldInput represents input for deleting a field
 type DeleteFieldInput struct {
-	FieldID string `json:"fieldId"`
+	FieldID gql.ID `json:"fieldId"`
 }
 
+// CreateSingleSelectFieldOptionInput represents input for creating a single select option
 type CreateSingleSelectFieldOptionInput struct {
-	FieldID     string `json:"fieldId"`
-	Name        string `json:"name"`
-	Color       string `json:"color"`
-	Description string `json:"description,omitempty"`
+	FieldID     gql.ID      `json:"fieldId"`
+	Name        gql.String  `json:"name"`
+	Color       gql.String  `json:"color"`
+	Description *gql.String `json:"description,omitempty"`
 }
 
+// UpdateSingleSelectFieldOptionInput represents input for updating a single select option
 type UpdateSingleSelectFieldOptionInput struct {
-	Name        *string `json:"name,omitempty"`
-	Color       *string `json:"color,omitempty"`
-	Description *string `json:"description,omitempty"`
-	OptionID    string  `json:"singleSelectOptionId"`
+	Name        *gql.String `json:"name,omitempty"`
+	Color       *gql.String `json:"color,omitempty"`
+	Description *gql.String `json:"description,omitempty"`
+	OptionID    gql.ID      `json:"singleSelectOptionId"`
 }
 
+// DeleteSingleSelectFieldOptionInput represents input for deleting a single select option
 type DeleteSingleSelectFieldOptionInput struct {
-	OptionID string `json:"singleSelectOptionId"`
+	OptionID gql.ID `json:"singleSelectOptionId"`
 }
 
 // Variable builders
-func BuildCreateFieldVariables(input CreateFieldInput) map[string]interface{} {
-	inputMap := map[string]interface{}{
-		"projectId": input.ProjectID,
-		"name":      input.Name,
-		"dataType":  input.DataType,
-	}
 
-	if input.DataType == ProjectV2FieldDataTypeSingleSelect && len(input.SingleSelectOptions) > 0 {
-		options := make([]map[string]interface{}, len(input.SingleSelectOptions))
-		for i, option := range input.SingleSelectOptions {
-			options[i] = map[string]interface{}{
-				"name":  option,
-				"color": "GRAY", // Default color
-			}
-		}
-		inputMap["singleSelectOptions"] = options
-	}
-
-	// Add iteration field configuration
-	if input.DataType == ProjectV2FieldDataTypeIteration && input.Duration != "" {
-		inputMap["iterationSetting"] = map[string]interface{}{
-			"duration": parseDuration(input.Duration),
-		}
-	}
-
+// BuildCreateFieldVariables builds variables for creating a field
+func BuildCreateFieldVariables(input *CreateFieldInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": inputMap,
+		"input": *input,
 	}
 }
 
-func BuildUpdateFieldVariables(input UpdateFieldInput) map[string]interface{} {
-	inputMap := map[string]interface{}{
-		"fieldId": input.FieldID,
-	}
-
-	if input.Name != nil {
-		inputMap["name"] = *input.Name
-	}
-
+// BuildUpdateFieldVariables builds variables for updating a field
+func BuildUpdateFieldVariables(input *UpdateFieldInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": inputMap,
+		"input": *input,
 	}
 }
 
-func BuildDeleteFieldVariables(input DeleteFieldInput) map[string]interface{} {
+// BuildDeleteFieldVariables builds variables for deleting a field
+func BuildDeleteFieldVariables(input *DeleteFieldInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"fieldId": input.FieldID,
-		},
+		"input": *input,
 	}
 }
 
-func BuildCreateSingleSelectFieldOptionVariables(input CreateSingleSelectFieldOptionInput) map[string]interface{} {
-	inputMap := map[string]interface{}{
-		"fieldId": input.FieldID,
-		"name":    input.Name,
-		"color":   input.Color,
-	}
-
-	if input.Description != "" {
-		inputMap["description"] = input.Description
-	}
-
+// BuildCreateSingleSelectFieldOptionVariables builds variables for creating an option
+func BuildCreateSingleSelectFieldOptionVariables(input *CreateSingleSelectFieldOptionInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": inputMap,
+		"input": *input,
 	}
 }
 
-func BuildUpdateSingleSelectFieldOptionVariables(input UpdateSingleSelectFieldOptionInput) map[string]interface{} {
-	inputMap := map[string]interface{}{
-		"singleSelectOptionId": input.OptionID,
-	}
-
-	if input.Name != nil {
-		inputMap["name"] = *input.Name
-	}
-	if input.Color != nil {
-		inputMap["color"] = *input.Color
-	}
-	if input.Description != nil {
-		inputMap["description"] = *input.Description
-	}
-
+// BuildUpdateSingleSelectFieldOptionVariables builds variables for updating an option
+func BuildUpdateSingleSelectFieldOptionVariables(input *UpdateSingleSelectFieldOptionInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": inputMap,
+		"input": *input,
 	}
 }
 
-func BuildDeleteSingleSelectFieldOptionVariables(input DeleteSingleSelectFieldOptionInput) map[string]interface{} {
+// BuildDeleteSingleSelectFieldOptionVariables builds variables for deleting an option
+func BuildDeleteSingleSelectFieldOptionVariables(input *DeleteSingleSelectFieldOptionInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"singleSelectOptionId": input.OptionID,
-		},
+		"input": *input,
 	}
 }
 
@@ -232,43 +183,5 @@ func ValidSingleSelectColors() []string {
 		SingleSelectColorBlue,
 		SingleSelectColorPurple,
 		SingleSelectColorPink,
-	}
-}
-
-// parseDuration parses duration string like "2w", "1m" into days
-func parseDuration(duration string) int {
-	if duration == "" {
-		return defaultIterationDays // Default 2 weeks
-	}
-
-	duration = strings.ToLower(strings.TrimSpace(duration))
-
-	// Handle numeric part and unit
-	var numStr string
-	var unit string
-
-	for i, char := range duration {
-		if char >= '0' && char <= '9' {
-			numStr += string(char)
-		} else {
-			unit = duration[i:]
-			break
-		}
-	}
-
-	num, err := strconv.Atoi(numStr)
-	if err != nil || num <= 0 {
-		return defaultIterationDays // Default fallback
-	}
-
-	switch unit {
-	case "d", "day", "days":
-		return num
-	case "w", "week", "weeks":
-		return num * daysPerWeek
-	case "m", "month", "months":
-		return num * daysPerMonth
-	default:
-		return defaultIterationDays // Default fallback
 	}
 }

@@ -1,6 +1,10 @@
 package graphql
 
-import "time"
+import (
+	"time"
+
+	gql "github.com/shurcooL/graphql"
+)
 
 // ProjectV2 represents a GitHub Project v2
 type ProjectV2 struct {
@@ -191,130 +195,114 @@ type RemoveItemFromProjectMutation struct {
 
 // CreateProjectInput represents input for creating a project
 type CreateProjectInput struct {
-	OwnerID     string `json:"ownerId"`
-	Title       string `json:"title"`
-	Description string `json:"description,omitempty"`
-	Readme      string `json:"readme,omitempty"`
-	Visibility  string `json:"visibility,omitempty"`
-	Repository  string `json:"repository,omitempty"`
+	OwnerID     gql.ID      `json:"ownerId"`
+	Title       gql.String  `json:"title"`
+	Description *gql.String `json:"description,omitempty"`
+	Readme      *gql.String `json:"readme,omitempty"`
+	Visibility  *gql.String `json:"visibility,omitempty"`
+	Repository  *gql.ID     `json:"repositoryId,omitempty"`
 }
 
 // UpdateProjectInput represents input for updating a project
 type UpdateProjectInput struct {
-	Title     *string `json:"title,omitempty"`
-	Closed    *bool   `json:"closed,omitempty"`
-	ProjectID string  `json:"projectId"`
+	Title     *gql.String  `json:"title,omitempty"`
+	Closed    *gql.Boolean `json:"closed,omitempty"`
+	ProjectID gql.ID       `json:"projectId"`
 }
 
 // DeleteProjectInput represents input for deleting a project
 type DeleteProjectInput struct {
-	ProjectID string `json:"projectId"`
+	ProjectID gql.ID `json:"projectId"`
 }
 
 // AddItemInput represents input for adding an item to a project
 type AddItemInput struct {
-	ProjectID string `json:"projectId"`
-	ContentID string `json:"contentId"`
+	ProjectID gql.ID `json:"projectId"`
+	ContentID gql.ID `json:"contentId"`
 }
 
 // UpdateItemFieldInput represents input for updating an item field
 type UpdateItemFieldInput struct {
 	Value     interface{} `json:"value"`
-	ProjectID string      `json:"projectId"`
-	ItemID    string      `json:"itemId"`
-	FieldID   string      `json:"fieldId"`
+	ProjectID gql.ID      `json:"projectId"`
+	ItemID    gql.ID      `json:"itemId"`
+	FieldID   gql.ID      `json:"fieldId"`
 }
 
 // RemoveItemInput represents input for removing an item from a project
 type RemoveItemInput struct {
-	ProjectID string `json:"projectId"`
-	ItemID    string `json:"itemId"`
+	ProjectID gql.ID `json:"projectId"`
+	ItemID    gql.ID `json:"itemId"`
 }
 
 // Variable Builders
 
 // BuildCreateProjectVariables builds variables for project creation
 func BuildCreateProjectVariables(input *CreateProjectInput) map[string]interface{} {
-	inputMap := map[string]interface{}{
-		"ownerId": input.OwnerID,
-		"title":   input.Title,
-	}
-
-	// Add optional fields only if provided
-	if input.Description != "" {
-		inputMap["description"] = input.Description
-	}
-	if input.Readme != "" {
-		inputMap["readme"] = input.Readme
-	}
-	if input.Visibility != "" {
-		inputMap["visibility"] = input.Visibility
-	}
-	if input.Repository != "" {
-		inputMap["repository"] = input.Repository
-	}
-
 	return map[string]interface{}{
-		"input": inputMap,
+		"input": *input,
 	}
 }
 
 // BuildUpdateProjectVariables builds variables for project update
-func BuildUpdateProjectVariables(input UpdateProjectInput) map[string]interface{} {
-	vars := map[string]interface{}{
-		"input": map[string]interface{}{
-			"projectId": input.ProjectID,
-		},
+func BuildUpdateProjectVariables(input *UpdateProjectInput) map[string]interface{} {
+	return map[string]interface{}{
+		"input": *input,
 	}
-
-	inputMap := vars["input"].(map[string]interface{})
-	if input.Title != nil {
-		inputMap["title"] = *input.Title
-	}
-	if input.Closed != nil {
-		inputMap["closed"] = *input.Closed
-	}
-
-	return vars
 }
 
 // BuildDeleteProjectVariables builds variables for project deletion
-func BuildDeleteProjectVariables(input DeleteProjectInput) map[string]interface{} {
+func BuildDeleteProjectVariables(input *DeleteProjectInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"projectId": input.ProjectID,
-		},
+		"input": *input,
 	}
 }
 
 // BuildAddItemVariables builds variables for adding an item
-func BuildAddItemVariables(input AddItemInput) map[string]interface{} {
+func BuildAddItemVariables(input *AddItemInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"projectId": input.ProjectID,
-			"contentId": input.ContentID,
-		},
+		"input": *input,
 	}
 }
 
 // BuildUpdateItemFieldVariables builds variables for updating an item field
-func BuildUpdateItemFieldVariables(input UpdateItemFieldInput) map[string]interface{} {
+func BuildUpdateItemFieldVariables(input *UpdateItemFieldInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"projectId": input.ProjectID,
-			"itemId":    input.ItemID,
-			"fieldId":   input.FieldID,
-			"value":     input.Value,
-		},
+		"input": *input,
 	}
 }
 
 // BuildRemoveItemVariables builds variables for removing an item
-func BuildRemoveItemVariables(input RemoveItemInput) map[string]interface{} {
+func BuildRemoveItemVariables(input *RemoveItemInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"projectId": input.ProjectID,
-			"itemId":    input.ItemID,
-		},
+		"input": *input,
+	}
+}
+
+// BuildListProjectsVariables builds variables for listing projects
+func BuildListProjectsVariables(login string, first int, after *string) map[string]interface{} {
+	vars := map[string]interface{}{
+		"login": gql.String(login),
+		"first": gql.Int(first), //nolint:gosec // first is always within int32 range
+	}
+	if after != nil {
+		vars["after"] = gql.String(*after)
+	} else {
+		vars["after"] = (*gql.String)(nil)
+	}
+	return vars
+}
+
+// BuildGetProjectVariables builds variables for getting a project
+func BuildGetProjectVariables(login string, number int, isOrg bool) map[string]interface{} {
+	if isOrg {
+		return map[string]interface{}{
+			"orgLogin": gql.String(login),
+			"number":   gql.Int(number), //nolint:gosec // number is always within int32 range
+		}
+	}
+	return map[string]interface{}{
+		"userLogin": gql.String(login),
+		"number":    gql.Int(number), //nolint:gosec // number is always within int32 range
 	}
 }

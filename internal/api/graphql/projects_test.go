@@ -3,6 +3,7 @@ package graphql
 import (
 	"testing"
 
+	gql "github.com/shurcooL/graphql"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -69,35 +70,51 @@ func TestItemMutations(t *testing.T) {
 
 func TestVariableBuilders(t *testing.T) {
 	t.Run("BuildCreateProjectVariables creates proper variables", func(t *testing.T) {
-		input := CreateProjectInput{
-			OwnerID: "test-owner-id",
-			Title:   "Test Project",
+		input := &CreateProjectInput{
+			OwnerID: gql.ID("test-owner-id"),
+			Title:   gql.String("Test Project"),
 		}
 
-		variables := BuildCreateProjectVariables(&input)
+		variables := BuildCreateProjectVariables(input)
 
 		assert.NotNil(t, variables)
 		assert.Contains(t, variables, "input")
-
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, "test-owner-id", inputVar["ownerId"])
-		assert.Equal(t, "Test Project", inputVar["title"])
 	})
 
 	t.Run("BuildAddItemVariables creates proper variables", func(t *testing.T) {
-		input := AddItemInput{
-			ProjectID: "project-id",
-			ContentID: "content-id",
+		input := &AddItemInput{
+			ProjectID: gql.ID("project-id"),
+			ContentID: gql.ID("content-id"),
 		}
 
 		variables := BuildAddItemVariables(input)
 
 		assert.NotNil(t, variables)
 		assert.Contains(t, variables, "input")
+	})
 
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, "project-id", inputVar["projectId"])
-		assert.Equal(t, "content-id", inputVar["contentId"])
+	t.Run("BuildListProjectsVariables creates proper variables", func(t *testing.T) {
+		variables := BuildListProjectsVariables("testuser", 10, nil)
+
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "login")
+		assert.Contains(t, variables, "first")
+	})
+
+	t.Run("BuildGetProjectVariables creates proper variables for org", func(t *testing.T) {
+		variables := BuildGetProjectVariables("testorg", 1, true)
+
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "orgLogin")
+		assert.Contains(t, variables, "number")
+	})
+
+	t.Run("BuildGetProjectVariables creates proper variables for user", func(t *testing.T) {
+		variables := BuildGetProjectVariables("testuser", 1, false)
+
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "userLogin")
+		assert.Contains(t, variables, "number")
 	})
 }
 

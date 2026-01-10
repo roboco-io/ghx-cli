@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	gql "github.com/shurcooL/graphql"
+
 	"github.com/roboco-io/gh-project-cli/internal/api"
 	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
 )
@@ -82,13 +84,25 @@ type DeleteFieldOptionInput struct {
 
 // CreateField creates a new project field
 func (s *FieldService) CreateField(ctx context.Context, input CreateFieldInput) (*graphql.ProjectV2Field, error) {
-	variables := graphql.BuildCreateFieldVariables(graphql.CreateFieldInput{
-		ProjectID:           input.ProjectID,
-		Name:                input.Name,
-		DataType:            input.DataType,
-		SingleSelectOptions: input.SingleSelectOptions,
-		Duration:            input.Duration,
-	})
+	gqlInput := &graphql.CreateFieldInput{
+		ProjectID: gql.ID(input.ProjectID),
+		Name:      gql.String(input.Name),
+		DataType:  input.DataType,
+	}
+
+	// Convert single select options to gql types
+	if input.DataType == graphql.ProjectV2FieldDataTypeSingleSelect && len(input.SingleSelectOptions) > 0 {
+		options := make([]graphql.SingleSelectOption, len(input.SingleSelectOptions))
+		for i, opt := range input.SingleSelectOptions {
+			options[i] = graphql.SingleSelectOption{
+				Name:  gql.String(opt),
+				Color: gql.String("GRAY"),
+			}
+		}
+		gqlInput.SingleSelectOptions = options
+	}
+
+	variables := graphql.BuildCreateFieldVariables(gqlInput)
 
 	var mutation graphql.CreateFieldMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -101,10 +115,15 @@ func (s *FieldService) CreateField(ctx context.Context, input CreateFieldInput) 
 
 // UpdateField updates an existing project field
 func (s *FieldService) UpdateField(ctx context.Context, input UpdateFieldInput) (*graphql.ProjectV2Field, error) {
-	variables := graphql.BuildUpdateFieldVariables(graphql.UpdateFieldInput{
-		FieldID: input.FieldID,
-		Name:    input.Name,
-	})
+	gqlInput := &graphql.UpdateFieldInput{
+		FieldID: gql.ID(input.FieldID),
+	}
+	if input.Name != nil {
+		name := gql.String(*input.Name)
+		gqlInput.Name = &name
+	}
+
+	variables := graphql.BuildUpdateFieldVariables(gqlInput)
 
 	var mutation graphql.UpdateFieldMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -117,8 +136,8 @@ func (s *FieldService) UpdateField(ctx context.Context, input UpdateFieldInput) 
 
 // DeleteField deletes a project field
 func (s *FieldService) DeleteField(ctx context.Context, input DeleteFieldInput) error {
-	variables := graphql.BuildDeleteFieldVariables(graphql.DeleteFieldInput{
-		FieldID: input.FieldID,
+	variables := graphql.BuildDeleteFieldVariables(&graphql.DeleteFieldInput{
+		FieldID: gql.ID(input.FieldID),
 	})
 
 	var mutation graphql.DeleteFieldMutation
@@ -135,17 +154,17 @@ func (s *FieldService) CreateFieldOption(
 	ctx context.Context,
 	input CreateFieldOptionInput,
 ) (*graphql.ProjectV2SingleSelectFieldOption, error) {
-	description := ""
+	gqlInput := &graphql.CreateSingleSelectFieldOptionInput{
+		FieldID: gql.ID(input.FieldID),
+		Name:    gql.String(input.Name),
+		Color:   gql.String(input.Color),
+	}
 	if input.Description != nil {
-		description = *input.Description
+		desc := gql.String(*input.Description)
+		gqlInput.Description = &desc
 	}
 
-	variables := graphql.BuildCreateSingleSelectFieldOptionVariables(graphql.CreateSingleSelectFieldOptionInput{
-		FieldID:     input.FieldID,
-		Name:        input.Name,
-		Color:       input.Color,
-		Description: description,
-	})
+	variables := graphql.BuildCreateSingleSelectFieldOptionVariables(gqlInput)
 
 	var mutation graphql.CreateSingleSelectFieldOptionMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -161,12 +180,23 @@ func (s *FieldService) UpdateFieldOption(
 	ctx context.Context,
 	input UpdateFieldOptionInput,
 ) (*graphql.ProjectV2SingleSelectFieldOption, error) {
-	variables := graphql.BuildUpdateSingleSelectFieldOptionVariables(graphql.UpdateSingleSelectFieldOptionInput{
-		OptionID:    input.OptionID,
-		Name:        input.Name,
-		Color:       input.Color,
-		Description: input.Description,
-	})
+	gqlInput := &graphql.UpdateSingleSelectFieldOptionInput{
+		OptionID: gql.ID(input.OptionID),
+	}
+	if input.Name != nil {
+		name := gql.String(*input.Name)
+		gqlInput.Name = &name
+	}
+	if input.Color != nil {
+		color := gql.String(*input.Color)
+		gqlInput.Color = &color
+	}
+	if input.Description != nil {
+		desc := gql.String(*input.Description)
+		gqlInput.Description = &desc
+	}
+
+	variables := graphql.BuildUpdateSingleSelectFieldOptionVariables(gqlInput)
 
 	var mutation graphql.UpdateSingleSelectFieldOptionMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -179,8 +209,8 @@ func (s *FieldService) UpdateFieldOption(
 
 // DeleteFieldOption deletes a single select field option
 func (s *FieldService) DeleteFieldOption(ctx context.Context, input DeleteFieldOptionInput) error {
-	variables := graphql.BuildDeleteSingleSelectFieldOptionVariables(graphql.DeleteSingleSelectFieldOptionInput{
-		OptionID: input.OptionID,
+	variables := graphql.BuildDeleteSingleSelectFieldOptionVariables(&graphql.DeleteSingleSelectFieldOptionInput{
+		OptionID: gql.ID(input.OptionID),
 	})
 
 	var mutation graphql.DeleteSingleSelectFieldOptionMutation

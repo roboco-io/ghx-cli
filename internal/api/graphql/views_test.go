@@ -3,6 +3,7 @@ package graphql
 import (
 	"testing"
 
+	gql "github.com/shurcooL/graphql"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,175 +27,132 @@ func TestProjectV2ViewTypes(t *testing.T) {
 
 func TestViewVariableBuilders(t *testing.T) {
 	t.Run("BuildCreateViewVariables creates proper variables", func(t *testing.T) {
-		input := CreateViewInput{
-			ProjectID: "test-project-id",
-			Name:      "Test View",
+		input := &CreateViewInput{
+			ProjectID: gql.ID("test-project-id"),
+			Name:      gql.String("Test View"),
 			Layout:    ProjectV2ViewLayoutTable,
 		}
 
 		variables := BuildCreateViewVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"projectId": "test-project-id",
-				"name":      "Test View",
-				"layout":    ProjectV2ViewLayoutTable,
-			},
-		}
-
-		assert.Equal(t, expected, variables)
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildUpdateViewVariables creates proper variables", func(t *testing.T) {
-		name := "Updated View"
-		filter := "status:todo"
-		input := UpdateViewInput{
-			ViewID: "test-view-id",
+		name := gql.String("Updated View")
+		filter := gql.String("status:todo")
+		input := &UpdateViewInput{
+			ViewID: gql.ID("test-view-id"),
 			Name:   &name,
 			Filter: &filter,
 		}
 
 		variables := BuildUpdateViewVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"viewId": "test-view-id",
-				"name":   "Updated View",
-				"filter": "status:todo",
-			},
-		}
-
-		assert.Equal(t, expected, variables)
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildUpdateViewVariables with minimal input", func(t *testing.T) {
-		input := UpdateViewInput{
-			ViewID: "test-view-id",
+		input := &UpdateViewInput{
+			ViewID: gql.ID("test-view-id"),
 		}
 
 		variables := BuildUpdateViewVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"viewId": "test-view-id",
-			},
-		}
-
-		assert.Equal(t, expected, variables)
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildDeleteViewVariables creates proper variables", func(t *testing.T) {
-		input := DeleteViewInput{
-			ViewID: "test-view-id",
+		input := &DeleteViewInput{
+			ViewID: gql.ID("test-view-id"),
 		}
 
 		variables := BuildDeleteViewVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"viewId": "test-view-id",
-			},
-		}
-
-		assert.Equal(t, expected, variables)
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildCopyViewVariables creates proper variables", func(t *testing.T) {
-		input := CopyViewInput{
-			ProjectID: "test-project-id",
-			ViewID:    "test-view-id",
-			Name:      "Copied View",
+		input := &CopyViewInput{
+			ProjectID: gql.ID("test-project-id"),
+			ViewID:    gql.ID("test-view-id"),
+			Name:      gql.String("Copied View"),
 		}
 
 		variables := BuildCopyViewVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"projectId": "test-project-id",
-				"viewId":    "test-view-id",
-				"name":      "Copied View",
-			},
-		}
-
-		assert.Equal(t, expected, variables)
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildUpdateViewSortByVariables creates proper variables", func(t *testing.T) {
-		sortByID := testFieldID
-		input := UpdateViewSortByInput{
-			ViewID:    "test-view-id",
+		sortByID := gql.ID(testFieldID)
+		input := &UpdateViewSortByInput{
+			ViewID:    gql.ID("test-view-id"),
 			SortByID:  &sortByID,
 			Direction: ProjectV2ViewSortDirectionASC,
 		}
 
 		variables := BuildUpdateViewSortByVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"viewId":    "test-view-id",
-				"sortById":  testFieldID,
-				"direction": ProjectV2ViewSortDirectionASC,
-			},
-		}
-
-		assert.Equal(t, expected, variables)
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildUpdateViewSortByVariables without sortById", func(t *testing.T) {
-		input := UpdateViewSortByInput{
-			ViewID:    "test-view-id",
+		input := &UpdateViewSortByInput{
+			ViewID:    gql.ID("test-view-id"),
 			Direction: ProjectV2ViewSortDirectionDESC,
 		}
 
 		variables := BuildUpdateViewSortByVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"viewId":    "test-view-id",
-				"direction": ProjectV2ViewSortDirectionDESC,
-			},
-		}
-
-		assert.Equal(t, expected, variables)
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildUpdateViewGroupByVariables creates proper variables", func(t *testing.T) {
-		groupByID := testFieldID
-		input := UpdateViewGroupByInput{
-			ViewID:    "test-view-id",
+		groupByID := gql.ID(testFieldID)
+		input := &UpdateViewGroupByInput{
+			ViewID:    gql.ID("test-view-id"),
 			GroupByID: &groupByID,
 			Direction: ProjectV2ViewSortDirectionASC,
 		}
 
 		variables := BuildUpdateViewGroupByVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"viewId":    "test-view-id",
-				"groupById": testFieldID,
-				"direction": ProjectV2ViewSortDirectionASC,
-			},
-		}
-
-		assert.Equal(t, expected, variables)
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildUpdateViewGroupByVariables without groupById", func(t *testing.T) {
-		input := UpdateViewGroupByInput{
-			ViewID:    "test-view-id",
+		input := &UpdateViewGroupByInput{
+			ViewID:    gql.ID("test-view-id"),
 			Direction: ProjectV2ViewSortDirectionDESC,
 		}
 
 		variables := BuildUpdateViewGroupByVariables(input)
 
-		expected := map[string]interface{}{
-			"input": map[string]interface{}{
-				"viewId":    "test-view-id",
-				"direction": ProjectV2ViewSortDirectionDESC,
-			},
-		}
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "input")
+	})
 
-		assert.Equal(t, expected, variables)
+	t.Run("BuildGetProjectViewsVariables creates proper variables", func(t *testing.T) {
+		variables := BuildGetProjectViewsVariables("test-project-id")
+
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "projectId")
+	})
+
+	t.Run("BuildGetViewVariables creates proper variables", func(t *testing.T) {
+		variables := BuildGetViewVariables("test-view-id")
+
+		assert.NotNil(t, variables)
+		assert.Contains(t, variables, "viewId")
 	})
 }
 

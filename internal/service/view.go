@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	gql "github.com/shurcooL/graphql"
+
 	"github.com/roboco-io/gh-project-cli/internal/api"
 	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
 )
@@ -90,9 +92,9 @@ type UpdateViewGroupInput struct {
 
 // CreateView creates a new project view
 func (s *ViewService) CreateView(ctx context.Context, input CreateViewInput) (*graphql.ProjectV2View, error) {
-	variables := graphql.BuildCreateViewVariables(graphql.CreateViewInput{
-		ProjectID: input.ProjectID,
-		Name:      input.Name,
+	variables := graphql.BuildCreateViewVariables(&graphql.CreateViewInput{
+		ProjectID: gql.ID(input.ProjectID),
+		Name:      gql.String(input.Name),
 		Layout:    input.Layout,
 	})
 
@@ -106,12 +108,22 @@ func (s *ViewService) CreateView(ctx context.Context, input CreateViewInput) (*g
 }
 
 // UpdateView updates an existing project view
+//
+//nolint:dupl // Similar structure to UpdateProject but operates on different types
 func (s *ViewService) UpdateView(ctx context.Context, input UpdateViewInput) (*graphql.ProjectV2View, error) {
-	variables := graphql.BuildUpdateViewVariables(graphql.UpdateViewInput{
-		ViewID: input.ViewID,
-		Name:   input.Name,
-		Filter: input.Filter,
-	})
+	gqlInput := &graphql.UpdateViewInput{
+		ViewID: gql.ID(input.ViewID),
+	}
+	if input.Name != nil {
+		name := gql.String(*input.Name)
+		gqlInput.Name = &name
+	}
+	if input.Filter != nil {
+		filter := gql.String(*input.Filter)
+		gqlInput.Filter = &filter
+	}
+
+	variables := graphql.BuildUpdateViewVariables(gqlInput)
 
 	var mutation graphql.UpdateProjectViewMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -124,8 +136,8 @@ func (s *ViewService) UpdateView(ctx context.Context, input UpdateViewInput) (*g
 
 // DeleteView deletes a project view
 func (s *ViewService) DeleteView(ctx context.Context, input DeleteViewInput) error {
-	variables := graphql.BuildDeleteViewVariables(graphql.DeleteViewInput{
-		ViewID: input.ViewID,
+	variables := graphql.BuildDeleteViewVariables(&graphql.DeleteViewInput{
+		ViewID: gql.ID(input.ViewID),
 	})
 
 	var mutation graphql.DeleteProjectViewMutation
@@ -139,10 +151,10 @@ func (s *ViewService) DeleteView(ctx context.Context, input DeleteViewInput) err
 
 // CopyView creates a copy of an existing view
 func (s *ViewService) CopyView(ctx context.Context, input CopyViewInput) (*graphql.ProjectV2View, error) {
-	variables := graphql.BuildCopyViewVariables(graphql.CopyViewInput{
-		ProjectID: input.ProjectID,
-		ViewID:    input.ViewID,
-		Name:      input.Name,
+	variables := graphql.BuildCopyViewVariables(&graphql.CopyViewInput{
+		ProjectID: gql.ID(input.ProjectID),
+		ViewID:    gql.ID(input.ViewID),
+		Name:      gql.String(input.Name),
 	})
 
 	var mutation graphql.CopyProjectViewMutation
@@ -155,12 +167,19 @@ func (s *ViewService) CopyView(ctx context.Context, input CopyViewInput) (*graph
 }
 
 // UpdateViewSort updates the sort configuration for a view
+//
+//nolint:dupl // Similar structure to UpdateViewGroup but operates on different field
 func (s *ViewService) UpdateViewSort(ctx context.Context, input UpdateViewSortInput) error {
-	variables := graphql.BuildUpdateViewSortByVariables(graphql.UpdateViewSortByInput{
-		ViewID:    input.ViewID,
-		SortByID:  input.SortByID,
+	gqlInput := &graphql.UpdateViewSortByInput{
+		ViewID:    gql.ID(input.ViewID),
 		Direction: input.Direction,
-	})
+	}
+	if input.SortByID != nil {
+		id := gql.ID(*input.SortByID)
+		gqlInput.SortByID = &id
+	}
+
+	variables := graphql.BuildUpdateViewSortByVariables(gqlInput)
 
 	var mutation graphql.UpdateProjectViewMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -172,12 +191,19 @@ func (s *ViewService) UpdateViewSort(ctx context.Context, input UpdateViewSortIn
 }
 
 // UpdateViewGroup updates the group configuration for a view
+//
+//nolint:dupl // Similar structure to UpdateViewSort but operates on different field
 func (s *ViewService) UpdateViewGroup(ctx context.Context, input UpdateViewGroupInput) error {
-	variables := graphql.BuildUpdateViewGroupByVariables(graphql.UpdateViewGroupByInput{
-		ViewID:    input.ViewID,
-		GroupByID: input.GroupByID,
+	gqlInput := &graphql.UpdateViewGroupByInput{
+		ViewID:    gql.ID(input.ViewID),
 		Direction: input.Direction,
-	})
+	}
+	if input.GroupByID != nil {
+		id := gql.ID(*input.GroupByID)
+		gqlInput.GroupByID = &id
+	}
+
+	variables := graphql.BuildUpdateViewGroupByVariables(gqlInput)
 
 	var mutation graphql.UpdateProjectViewMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -190,9 +216,7 @@ func (s *ViewService) UpdateViewGroup(ctx context.Context, input UpdateViewGroup
 
 // GetProjectViews gets all views for a project
 func (s *ViewService) GetProjectViews(ctx context.Context, projectID string) ([]ViewInfo, error) {
-	variables := map[string]interface{}{
-		"projectId": projectID,
-	}
+	variables := graphql.BuildGetProjectViewsVariables(projectID)
 
 	var query graphql.GetProjectViewsQuery
 	err := s.client.Query(ctx, &query, variables)
@@ -238,9 +262,7 @@ func (s *ViewService) GetProjectViews(ctx context.Context, projectID string) ([]
 
 // GetView gets a specific view by ID
 func (s *ViewService) GetView(ctx context.Context, viewID string) (*ViewInfo, error) {
-	variables := map[string]interface{}{
-		"viewId": viewID,
-	}
+	variables := graphql.BuildGetViewVariables(viewID)
 
 	var query graphql.GetProjectViewQuery
 	err := s.client.Query(ctx, &query, variables)

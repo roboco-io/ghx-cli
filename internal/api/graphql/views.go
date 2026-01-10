@@ -1,6 +1,10 @@
 package graphql
 
-import "time"
+import (
+	"time"
+
+	gql "github.com/shurcooL/graphql"
+)
 
 // ProjectV2View represents a view in a GitHub Project v2
 type ProjectV2View struct {
@@ -121,128 +125,100 @@ type CopyProjectViewMutation struct {
 
 // CreateViewInput represents input for creating a view
 type CreateViewInput struct {
-	ProjectID string              `json:"projectId"`
-	Name      string              `json:"name"`
+	ProjectID gql.ID              `json:"projectId"`
+	Name      gql.String          `json:"name"`
 	Layout    ProjectV2ViewLayout `json:"layout"`
 }
 
 // UpdateViewInput represents input for updating a view
 type UpdateViewInput struct {
-	Name   *string `json:"name,omitempty"`
-	Filter *string `json:"filter,omitempty"`
-	ViewID string  `json:"viewId"`
+	Name   *gql.String `json:"name,omitempty"`
+	Filter *gql.String `json:"filter,omitempty"`
+	ViewID gql.ID      `json:"viewId"`
 }
 
 // DeleteViewInput represents input for deleting a view
 type DeleteViewInput struct {
-	ViewID string `json:"viewId"`
+	ViewID gql.ID `json:"viewId"`
 }
 
 // CopyViewInput represents input for copying a view
 type CopyViewInput struct {
-	ProjectID string `json:"projectId"`
-	ViewID    string `json:"viewId"`
-	Name      string `json:"name"`
+	ProjectID gql.ID     `json:"projectId"`
+	ViewID    gql.ID     `json:"viewId"`
+	Name      gql.String `json:"name"`
 }
 
 // UpdateViewSortByInput represents input for updating view sort configuration
 type UpdateViewSortByInput struct {
-	ViewID    string                     `json:"viewId"`
-	SortByID  *string                    `json:"sortById,omitempty"`
+	ViewID    gql.ID                     `json:"viewId"`
+	SortByID  *gql.ID                    `json:"sortById,omitempty"`
 	Direction ProjectV2ViewSortDirection `json:"direction"`
 }
 
 // UpdateViewGroupByInput represents input for updating view group configuration
 type UpdateViewGroupByInput struct {
-	ViewID    string                     `json:"viewId"`
-	GroupByID *string                    `json:"groupById,omitempty"`
+	ViewID    gql.ID                     `json:"viewId"`
+	GroupByID *gql.ID                    `json:"groupById,omitempty"`
 	Direction ProjectV2ViewSortDirection `json:"direction"`
 }
 
 // Variable Builders
 
 // BuildCreateViewVariables builds variables for view creation
-func BuildCreateViewVariables(input CreateViewInput) map[string]interface{} {
+func BuildCreateViewVariables(input *CreateViewInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"projectId": input.ProjectID,
-			"name":      input.Name,
-			"layout":    input.Layout,
-		},
+		"input": *input,
 	}
 }
 
 // BuildUpdateViewVariables builds variables for view update
-func BuildUpdateViewVariables(input UpdateViewInput) map[string]interface{} {
-	vars := map[string]interface{}{
-		"input": map[string]interface{}{
-			"viewId": input.ViewID,
-		},
+func BuildUpdateViewVariables(input *UpdateViewInput) map[string]interface{} {
+	return map[string]interface{}{
+		"input": *input,
 	}
-
-	inputMap := vars["input"].(map[string]interface{})
-	if input.Name != nil {
-		inputMap["name"] = *input.Name
-	}
-	if input.Filter != nil {
-		inputMap["filter"] = *input.Filter
-	}
-
-	return vars
 }
 
 // BuildDeleteViewVariables builds variables for view deletion
-func BuildDeleteViewVariables(input DeleteViewInput) map[string]interface{} {
+func BuildDeleteViewVariables(input *DeleteViewInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"viewId": input.ViewID,
-		},
+		"input": *input,
 	}
 }
 
 // BuildCopyViewVariables builds variables for view copying
-func BuildCopyViewVariables(input CopyViewInput) map[string]interface{} {
+func BuildCopyViewVariables(input *CopyViewInput) map[string]interface{} {
 	return map[string]interface{}{
-		"input": map[string]interface{}{
-			"projectId": input.ProjectID,
-			"viewId":    input.ViewID,
-			"name":      input.Name,
-		},
+		"input": *input,
 	}
 }
 
 // BuildUpdateViewSortByVariables builds variables for updating view sort configuration
-func BuildUpdateViewSortByVariables(input UpdateViewSortByInput) map[string]interface{} {
-	vars := map[string]interface{}{
-		"input": map[string]interface{}{
-			"viewId":    input.ViewID,
-			"direction": input.Direction,
-		},
+func BuildUpdateViewSortByVariables(input *UpdateViewSortByInput) map[string]interface{} {
+	return map[string]interface{}{
+		"input": *input,
 	}
-
-	inputMap := vars["input"].(map[string]interface{})
-	if input.SortByID != nil {
-		inputMap["sortById"] = *input.SortByID
-	}
-
-	return vars
 }
 
 // BuildUpdateViewGroupByVariables builds variables for updating view group configuration
-func BuildUpdateViewGroupByVariables(input UpdateViewGroupByInput) map[string]interface{} {
-	vars := map[string]interface{}{
-		"input": map[string]interface{}{
-			"viewId":    input.ViewID,
-			"direction": input.Direction,
-		},
+func BuildUpdateViewGroupByVariables(input *UpdateViewGroupByInput) map[string]interface{} {
+	return map[string]interface{}{
+		"input": *input,
 	}
+}
 
-	inputMap := vars["input"].(map[string]interface{})
-	if input.GroupByID != nil {
-		inputMap["groupById"] = *input.GroupByID
+// BuildGetProjectViewsVariables builds variables for getting project views
+func BuildGetProjectViewsVariables(projectID string) map[string]interface{} {
+	return map[string]interface{}{
+		"projectId": gql.ID(projectID),
 	}
+}
 
-	return vars
+// BuildGetViewVariables builds variables for getting a view
+func BuildGetViewVariables(viewID string) map[string]interface{} {
+	return map[string]interface{}{
+		"viewId": gql.ID(viewID),
+	}
 }
 
 // Helper Functions

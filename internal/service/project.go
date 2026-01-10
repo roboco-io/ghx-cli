@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	gql "github.com/shurcooL/graphql"
 	"gopkg.in/yaml.v3"
 
 	"github.com/roboco-io/gh-project-cli/internal/api"
@@ -76,14 +77,7 @@ func convertProjectNodes(nodes []graphql.ProjectV2) []ProjectInfo {
 
 // buildProjectVariables builds common GraphQL variables for project listing
 func buildProjectVariables(login string, first int, after *string) map[string]interface{} {
-	variables := map[string]interface{}{
-		"login": login,
-		"first": first,
-	}
-	if after != nil {
-		variables["after"] = *after
-	}
-	return variables
+	return graphql.BuildListProjectsVariables(login, first, after)
 }
 
 // ListUserProjects lists projects for a user
@@ -122,12 +116,9 @@ func (s *ProjectService) ListOrgProjects(ctx context.Context, opts ListOrgProjec
 
 // GetProject gets a specific project by number
 func (s *ProjectService) GetProject(ctx context.Context, owner string, number int, isOrg bool) (*graphql.ProjectV2, error) {
-	if isOrg {
-		variables := map[string]interface{}{
-			"orgLogin": owner,
-			"number":   number,
-		}
+	variables := graphql.BuildGetProjectVariables(owner, number, isOrg)
 
+	if isOrg {
 		var query graphql.GetProjectQuery
 		err := s.client.Query(ctx, &query, variables)
 		if err != nil {
@@ -135,11 +126,6 @@ func (s *ProjectService) GetProject(ctx context.Context, owner string, number in
 		}
 
 		return &query.Organization.ProjectV2, nil
-	}
-
-	variables := map[string]interface{}{
-		"userLogin": owner,
-		"number":    number,
 	}
 
 	var query graphql.GetUserProjectQuery
@@ -163,14 +149,28 @@ type CreateProjectInput struct {
 
 // CreateProject creates a new project
 func (s *ProjectService) CreateProject(ctx context.Context, input *CreateProjectInput) (*graphql.ProjectV2, error) {
-	variables := graphql.BuildCreateProjectVariables(&graphql.CreateProjectInput{
-		OwnerID:     input.OwnerID,
-		Title:       input.Title,
-		Description: input.Description,
-		Readme:      input.Readme,
-		Visibility:  input.Visibility,
-		Repository:  input.Repository,
-	})
+	gqlInput := &graphql.CreateProjectInput{
+		OwnerID: gql.ID(input.OwnerID),
+		Title:   gql.String(input.Title),
+	}
+	if input.Description != "" {
+		desc := gql.String(input.Description)
+		gqlInput.Description = &desc
+	}
+	if input.Readme != "" {
+		readme := gql.String(input.Readme)
+		gqlInput.Readme = &readme
+	}
+	if input.Visibility != "" {
+		visibility := gql.String(input.Visibility)
+		gqlInput.Visibility = &visibility
+	}
+	if input.Repository != "" {
+		repoID := gql.ID(input.Repository)
+		gqlInput.Repository = &repoID
+	}
+
+	variables := graphql.BuildCreateProjectVariables(gqlInput)
 
 	var mutation graphql.CreateProjectMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -454,12 +454,22 @@ type UpdateProjectInput struct {
 }
 
 // UpdateProject updates an existing project
+//
+//nolint:dupl // Similar structure to UpdateView but operates on different types
 func (s *ProjectService) UpdateProject(ctx context.Context, input UpdateProjectInput) (*graphql.ProjectV2, error) {
-	variables := graphql.BuildUpdateProjectVariables(graphql.UpdateProjectInput{
-		ProjectID: input.ProjectID,
-		Title:     input.Title,
-		Closed:    input.Closed,
-	})
+	gqlInput := &graphql.UpdateProjectInput{
+		ProjectID: gql.ID(input.ProjectID),
+	}
+	if input.Title != nil {
+		title := gql.String(*input.Title)
+		gqlInput.Title = &title
+	}
+	if input.Closed != nil {
+		closed := gql.Boolean(*input.Closed)
+		gqlInput.Closed = &closed
+	}
+
+	variables := graphql.BuildUpdateProjectVariables(gqlInput)
 
 	var mutation graphql.UpdateProjectMutation
 	err := s.client.Mutate(ctx, &mutation, variables)
@@ -472,8 +482,8 @@ func (s *ProjectService) UpdateProject(ctx context.Context, input UpdateProjectI
 
 // DeleteProject deletes a project
 func (s *ProjectService) DeleteProject(ctx context.Context, projectID string) error {
-	variables := graphql.BuildDeleteProjectVariables(graphql.DeleteProjectInput{
-		ProjectID: projectID,
+	variables := graphql.BuildDeleteProjectVariables(&graphql.DeleteProjectInput{
+		ProjectID: gql.ID(projectID),
 	})
 
 	var mutation graphql.DeleteProjectMutation
@@ -493,9 +503,9 @@ type AddItemInput struct {
 
 // AddItem adds an item to a project
 func (s *ProjectService) AddItem(ctx context.Context, input AddItemInput) (*graphql.ProjectV2Item, error) {
-	variables := graphql.BuildAddItemVariables(graphql.AddItemInput{
-		ProjectID: input.ProjectID,
-		ContentID: input.ContentID,
+	variables := graphql.BuildAddItemVariables(&graphql.AddItemInput{
+		ProjectID: gql.ID(input.ProjectID),
+		ContentID: gql.ID(input.ContentID),
 	})
 
 	var mutation graphql.AddItemToProjectMutation
@@ -517,10 +527,10 @@ type UpdateItemFieldInput struct {
 
 // UpdateItemField updates a field value for an item
 func (s *ProjectService) UpdateItemField(ctx context.Context, input UpdateItemFieldInput) (*graphql.ProjectV2Item, error) {
-	variables := graphql.BuildUpdateItemFieldVariables(graphql.UpdateItemFieldInput{
-		ProjectID: input.ProjectID,
-		ItemID:    input.ItemID,
-		FieldID:   input.FieldID,
+	variables := graphql.BuildUpdateItemFieldVariables(&graphql.UpdateItemFieldInput{
+		ProjectID: gql.ID(input.ProjectID),
+		ItemID:    gql.ID(input.ItemID),
+		FieldID:   gql.ID(input.FieldID),
 		Value:     input.Value,
 	})
 
@@ -541,9 +551,9 @@ type RemoveItemInput struct {
 
 // RemoveItem removes an item from a project
 func (s *ProjectService) RemoveItem(ctx context.Context, input RemoveItemInput) error {
-	variables := graphql.BuildRemoveItemVariables(graphql.RemoveItemInput{
-		ProjectID: input.ProjectID,
-		ItemID:    input.ItemID,
+	variables := graphql.BuildRemoveItemVariables(&graphql.RemoveItemInput{
+		ProjectID: gql.ID(input.ProjectID),
+		ItemID:    gql.ID(input.ItemID),
 	})
 
 	var mutation graphql.RemoveItemFromProjectMutation

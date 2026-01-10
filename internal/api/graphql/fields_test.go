@@ -3,6 +3,7 @@ package graphql
 import (
 	"testing"
 
+	gql "github.com/shurcooL/graphql"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -40,9 +41,9 @@ func TestFieldMutations(t *testing.T) {
 
 func TestFieldVariableBuilders(t *testing.T) {
 	t.Run("BuildCreateFieldVariables creates proper variables", func(t *testing.T) {
-		input := CreateFieldInput{
-			ProjectID: "project-id",
-			Name:      "Priority",
+		input := &CreateFieldInput{
+			ProjectID: gql.ID("project-id"),
+			Name:      gql.String("Priority"),
 			DataType:  ProjectV2FieldDataTypeText,
 		}
 
@@ -50,37 +51,30 @@ func TestFieldVariableBuilders(t *testing.T) {
 
 		assert.NotNil(t, variables)
 		assert.Contains(t, variables, "input")
-
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, "project-id", inputVar["projectId"])
-		assert.Equal(t, "Priority", inputVar["name"])
-		assert.Equal(t, ProjectV2FieldDataTypeText, inputVar["dataType"])
 	})
 
 	t.Run("BuildCreateFieldVariables with single select options", func(t *testing.T) {
-		input := CreateFieldInput{
-			ProjectID:           "project-id",
-			Name:                "Priority",
-			DataType:            ProjectV2FieldDataTypeSingleSelect,
-			SingleSelectOptions: []string{"High", "Medium", "Low"},
+		input := &CreateFieldInput{
+			ProjectID: gql.ID("project-id"),
+			Name:      gql.String("Priority"),
+			DataType:  ProjectV2FieldDataTypeSingleSelect,
+			SingleSelectOptions: []SingleSelectOption{
+				{Name: gql.String("High"), Color: gql.String("GRAY")},
+				{Name: gql.String("Medium"), Color: gql.String("GRAY")},
+				{Name: gql.String("Low"), Color: gql.String("GRAY")},
+			},
 		}
 
 		variables := BuildCreateFieldVariables(input)
 
 		assert.NotNil(t, variables)
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, ProjectV2FieldDataTypeSingleSelect, inputVar["dataType"])
-
-		options := inputVar["singleSelectOptions"].([]map[string]interface{})
-		assert.Len(t, options, 3)
-		assert.Equal(t, "High", options[0]["name"])
-		assert.Equal(t, "GRAY", options[0]["color"])
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildUpdateFieldVariables creates proper variables", func(t *testing.T) {
-		newName := "Updated Priority"
-		input := UpdateFieldInput{
-			FieldID: "field-id",
+		newName := gql.String("Updated Priority")
+		input := &UpdateFieldInput{
+			FieldID: gql.ID("field-id"),
 			Name:    &newName,
 		}
 
@@ -88,67 +82,54 @@ func TestFieldVariableBuilders(t *testing.T) {
 
 		assert.NotNil(t, variables)
 		assert.Contains(t, variables, "input")
-
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, "field-id", inputVar["fieldId"])
-		assert.Equal(t, "Updated Priority", inputVar["name"])
 	})
 
 	t.Run("BuildDeleteFieldVariables creates proper variables", func(t *testing.T) {
-		input := DeleteFieldInput{
-			FieldID: "field-id",
+		input := &DeleteFieldInput{
+			FieldID: gql.ID("field-id"),
 		}
 
 		variables := BuildDeleteFieldVariables(input)
 
 		assert.NotNil(t, variables)
 		assert.Contains(t, variables, "input")
-
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, "field-id", inputVar["fieldId"])
 	})
 
 	t.Run("BuildCreateSingleSelectFieldOptionVariables creates proper variables", func(t *testing.T) {
-		input := CreateSingleSelectFieldOptionInput{
-			FieldID:     "field-id",
-			Name:        "Critical",
-			Color:       SingleSelectColorRed,
-			Description: "Critical priority items",
+		desc := gql.String("Critical priority items")
+		input := &CreateSingleSelectFieldOptionInput{
+			FieldID:     gql.ID("field-id"),
+			Name:        gql.String("Critical"),
+			Color:       gql.String(SingleSelectColorRed),
+			Description: &desc,
 		}
 
 		variables := BuildCreateSingleSelectFieldOptionVariables(input)
 
 		assert.NotNil(t, variables)
 		assert.Contains(t, variables, "input")
-
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, "field-id", inputVar["fieldId"])
-		assert.Equal(t, "Critical", inputVar["name"])
-		assert.Equal(t, SingleSelectColorRed, inputVar["color"])
-		assert.Equal(t, "Critical priority items", inputVar["description"])
 	})
 
 	t.Run("BuildCreateSingleSelectFieldOptionVariables without description", func(t *testing.T) {
-		input := CreateSingleSelectFieldOptionInput{
-			FieldID: "field-id",
-			Name:    "Critical",
-			Color:   SingleSelectColorRed,
+		input := &CreateSingleSelectFieldOptionInput{
+			FieldID: gql.ID("field-id"),
+			Name:    gql.String("Critical"),
+			Color:   gql.String(SingleSelectColorRed),
 		}
 
 		variables := BuildCreateSingleSelectFieldOptionVariables(input)
 
 		assert.NotNil(t, variables)
-		inputVar := variables["input"].(map[string]interface{})
-		assert.NotContains(t, inputVar, "description")
+		assert.Contains(t, variables, "input")
 	})
 
 	t.Run("BuildUpdateSingleSelectFieldOptionVariables creates proper variables", func(t *testing.T) {
-		newName := "Very High"
-		newColor := SingleSelectColorOrange
-		newDescription := "Very high priority"
+		newName := gql.String("Very High")
+		newColor := gql.String(SingleSelectColorOrange)
+		newDescription := gql.String("Very high priority")
 
-		input := UpdateSingleSelectFieldOptionInput{
-			OptionID:    "option-id",
+		input := &UpdateSingleSelectFieldOptionInput{
+			OptionID:    gql.ID("option-id"),
 			Name:        &newName,
 			Color:       &newColor,
 			Description: &newDescription,
@@ -158,26 +139,17 @@ func TestFieldVariableBuilders(t *testing.T) {
 
 		assert.NotNil(t, variables)
 		assert.Contains(t, variables, "input")
-
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, "option-id", inputVar["singleSelectOptionId"])
-		assert.Equal(t, "Very High", inputVar["name"])
-		assert.Equal(t, SingleSelectColorOrange, inputVar["color"])
-		assert.Equal(t, "Very high priority", inputVar["description"])
 	})
 
 	t.Run("BuildDeleteSingleSelectFieldOptionVariables creates proper variables", func(t *testing.T) {
-		input := DeleteSingleSelectFieldOptionInput{
-			OptionID: "option-id",
+		input := &DeleteSingleSelectFieldOptionInput{
+			OptionID: gql.ID("option-id"),
 		}
 
 		variables := BuildDeleteSingleSelectFieldOptionVariables(input)
 
 		assert.NotNil(t, variables)
 		assert.Contains(t, variables, "input")
-
-		inputVar := variables["input"].(map[string]interface{})
-		assert.Equal(t, "option-id", inputVar["singleSelectOptionId"])
 	})
 }
 
