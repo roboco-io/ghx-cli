@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // UpdateOptionOptions holds options for the update-option command
@@ -36,9 +36,9 @@ At least one property must be specified.
 Available colors: gray, red, orange, yellow, green, blue, purple, pink
 
 Examples:
-  ghp field update-option option-id --name "Very High"
-  ghp field update-option option-id --color red
-  ghp field update-option option-id --name "Critical" --color red --description "Highest priority"`,
+  ghx field update-option option-id --name "Very High"
+  ghx field update-option option-id --color red
+  ghx field update-option option-id --name "Critical" --color red --description "Highest priority"`,
 
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

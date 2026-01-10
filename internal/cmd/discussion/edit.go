@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // EditOptions holds options for the edit command
@@ -34,9 +34,9 @@ func NewEditCmd() *cobra.Command {
 		Long: `Edit an existing discussion's title, body, or category.
 
 At least one of --title, --body, or --category must be specified.`,
-		Example: `  ghp discussion edit owner/repo 123 --title "New title"
-  ghp discussion edit owner/repo 123 --body "Updated description"
-  ghp discussion edit owner/repo 123 --category ideas`,
+		Example: `  ghx discussion edit owner/repo 123 --title "New title"
+  ghx discussion edit owner/repo 123 --body "Updated description"
+  ghx discussion edit owner/repo 123 --category ideas`,
 		Args: cobra.ExactArgs(2),
 		PreRunE: func(_ *cobra.Command, _ []string) error {
 			if title == "" && body == "" && category == "" {

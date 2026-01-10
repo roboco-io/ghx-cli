@@ -12,8 +12,8 @@ import (
 	gql "github.com/shurcooL/graphql"
 	"gopkg.in/yaml.v3"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
 )
 
 // ProjectService handles project-related operations
@@ -315,7 +315,7 @@ func (s *ProjectService) ExportProject(ctx context.Context, exportData *ProjectE
 		Metadata: ExportMetadata{
 			Version:     "1.0",
 			ExportedAt:  time.Now(),
-			ExportedBy:  "gh-project-cli",
+			ExportedBy:  "ghx-cli",
 			ToolVersion: "1.0.0",
 		},
 		Project: ExportedProjectData{

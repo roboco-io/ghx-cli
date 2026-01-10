@@ -7,10 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 const (
@@ -39,10 +39,10 @@ Item references can be in the following formats:
 • https://github.com/owner/repo/pull/456 (GitHub PR URL)
 
 Examples:
-  ghp item view octocat/Hello-World#123              # View issue details
-  ghp item view https://github.com/cli/cli/pull/456  # View PR from URL
-  ghp item view myorg/repo#789 --format json         # View in JSON format
-  ghp item view octocat/Hello-World#123 --web        # Open in browser`,
+  ghx item view octocat/Hello-World#123              # View issue details
+  ghx item view https://github.com/cli/cli/pull/456  # View PR from URL
+  ghx item view myorg/repo#789 --format json         # View in JSON format
+  ghx item view octocat/Hello-World#123 --web        # Open in browser`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.ItemRef = args[0]

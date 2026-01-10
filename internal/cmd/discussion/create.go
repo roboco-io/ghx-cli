@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // CreateOptions holds options for the create command
@@ -32,8 +32,8 @@ func NewCreateCmd() *cobra.Command {
 
 You must specify a category (by slug) for the discussion.
 Use 'ghp discussion category list' to see available categories.`,
-		Example: `  ghp discussion create owner/repo --category ideas --title "New feature" --body "Description"
-  ghp discussion create owner/repo -c general -t "Question" -b "How do I...?"`,
+		Example: `  ghx discussion create owner/repo --category ideas --title "New feature" --body "Description"
+  ghx discussion create owner/repo -c general -t "Question" -b "How do I...?"`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

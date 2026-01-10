@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 const (
@@ -43,9 +43,9 @@ Item references can be in the following formats:
 Project references should be in owner/number format (e.g., octocat/1).
 
 Examples:
-  ghp item add octocat/1 octocat/Hello-World#123     # Add issue to project
-  ghp item add myorg/2 myorg/repo#456 --format json  # Add PR with JSON output
-  ghp item add octocat/1 --draft --title "New task"  # Create draft issue`,
+  ghx item add octocat/1 octocat/Hello-World#123     # Add issue to project
+  ghx item add myorg/2 myorg/repo#456 --format json  # Add PR with JSON output
+  ghx item add octocat/1 --draft --title "New task"  # Create draft issue`,
 		Args: cobra.RangeArgs(1, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.ProjectRef = args[0]

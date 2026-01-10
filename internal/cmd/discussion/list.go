@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ListOptions holds options for the list command
@@ -35,12 +35,12 @@ func NewListCmd() *cobra.Command {
 
 You can filter discussions by category, state, and whether they have been answered.
 The --answered and --unanswered flags are mutually exclusive.`,
-		Example: `  ghp discussion list owner/repo                    # List all discussions
-  ghp discussion list owner/repo --category ideas   # Filter by category
-  ghp discussion list owner/repo --state open       # Filter by state
-  ghp discussion list owner/repo --answered         # Show only answered
-  ghp discussion list owner/repo --unanswered       # Show only unanswered
-  ghp discussion list owner/repo --limit 50         # Limit results`,
+		Example: `  ghx discussion list owner/repo                    # List all discussions
+  ghx discussion list owner/repo --category ideas   # Filter by category
+  ghx discussion list owner/repo --state open       # Filter by state
+  ghx discussion list owner/repo --answered         # Show only answered
+  ghx discussion list owner/repo --unanswered       # Show only unanswered
+  ghx discussion list owner/repo --limit 50         # Limit results`,
 		Args: cobra.ExactArgs(1),
 		PreRunE: func(_ *cobra.Command, _ []string) error {
 			if answered && unanswered {

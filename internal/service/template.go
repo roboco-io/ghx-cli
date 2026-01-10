@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api"
 )
 
 // TemplateService handles template-related operations

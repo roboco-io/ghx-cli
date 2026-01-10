@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ghp-cli is a Go CLI tool for GitHub features not fully supported by the official `gh` CLI. It uses GitHub's GraphQL API to provide:
+ghx-cli (GitHub eXtensions) is a Go CLI tool for GitHub features not fully supported by the official `gh` CLI. It uses GitHub's GraphQL API to provide:
 - **GitHub Projects v2**: View management, workflow automation, bulk operations, analytics
 - **GitHub Discussions**: Full discussion management (create, comment, answer, close, lock)
 
@@ -12,7 +12,7 @@ ghp-cli is a Go CLI tool for GitHub features not fully supported by the official
 
 ```bash
 # Build
-make build              # Build binary to bin/ghp
+make build              # Build binary to bin/ghx
 make install            # Build and install to GOPATH/bin
 
 # Testing
@@ -27,14 +27,14 @@ make lint               # Run golangci-lint (strict config in .golangci.yml)
 make fmt                # Format code with gofmt and tidy modules
 
 # Run directly
-go run ./cmd/ghp        # Run without building
+go run ./cmd/ghx        # Run without building
 ```
 
 ## Architecture
 
 ```
 cmd/
-  ghp/main.go           # Entry point, sets version info
+  ghx/main.go           # Entry point, sets version info
   root.go               # Root cobra command, registers subcommands
 
 internal/
@@ -54,13 +54,13 @@ internal/
     gh_integration.go   # GitHub CLI token extraction
 
   cmd/                  # Cobra command definitions
-    project/            # ghp project [create|list|view|edit|delete|export|import|link|workflow|template]
-    item/               # ghp item [add|list|view|edit|remove|add-bulk|update-bulk]
-    field/              # ghp field [create|list|update|delete|add-option|update-option|delete-option]
-    view/               # ghp view [create|list|update|delete|copy|sort|group]
-    discussion/         # ghp discussion [list|view|create|edit|delete|close|reopen|lock|unlock|comment|answer|category]
-    analytics/          # ghp analytics [overview|export|bulk-update]
-    auth/               # ghp auth [status]
+    project/            # ghx project [create|list|view|edit|delete|export|import|link|workflow|template]
+    item/               # ghx item [add|list|view|edit|remove|add-bulk|update-bulk]
+    field/              # ghx field [create|list|update|delete|add-option|update-option|delete-option]
+    view/               # ghx view [create|list|update|delete|copy|sort|group]
+    discussion/         # ghx discussion [list|view|create|edit|delete|close|reopen|lock|unlock|comment|answer|category]
+    analytics/          # ghx analytics [overview|export|bulk-update]
+    auth/               # ghx auth [status]
 
   service/              # Business logic layer between commands and API
     project.go          # Project operations, export/import logic
@@ -82,7 +82,7 @@ pkg/models/             # Shared data models
 
 **Authentication**: Uses `gh auth token` from GitHub CLI first, falls back to `GITHUB_TOKEN` or `GH_TOKEN` environment variables.
 
-**Configuration**: Uses Viper with config file at `~/.ghp.yaml`, environment variables prefixed with `GHP_`.
+**Configuration**: Uses Viper with config file at `~/.ghx.yaml`, environment variables prefixed with `GHX_`.
 
 ## Pre-commit Hooks
 

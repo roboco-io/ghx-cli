@@ -21,9 +21,9 @@ This command analyzes team velocity metrics including:
 • Burndown and burnup charts data
 
 Examples:
-  ghp analytics velocity octocat/123
-  ghp analytics velocity octocat/123 --period monthly
-  ghp analytics velocity octocat/123 --format json --period weekly`,
+  ghx analytics velocity octocat/123
+  ghx analytics velocity octocat/123 --period monthly
+  ghx analytics velocity octocat/123 --format json --period weekly`,
 
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return fmt.Errorf("velocity analytics not yet implemented - coming in future release")
@@ -51,9 +51,9 @@ This command analyzes project timeline data including:
 • Deadline adherence and schedule variance
 
 Examples:
-  ghp analytics timeline octocat/123
-  ghp analytics timeline octocat/123 --include-activities
-  ghp analytics timeline octocat/123 --format json --milestone-focus`,
+  ghx analytics timeline octocat/123
+  ghx analytics timeline octocat/123 --include-activities
+  ghx analytics timeline octocat/123 --format json --milestone-focus`,
 
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return fmt.Errorf("timeline analytics not yet implemented - coming in future release")
@@ -82,9 +82,9 @@ This command provides comprehensive distribution analysis including:
 • Geographic and team distribution (if available)
 
 Examples:
-  ghp analytics distribution octocat/123
-  ghp analytics distribution octocat/123 --focus assignee
-  ghp analytics distribution octocat/123 --format json --include-percentages`,
+  ghx analytics distribution octocat/123
+  ghx analytics distribution octocat/123 --focus assignee
+  ghx analytics distribution octocat/123 --format json --include-percentages`,
 
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return fmt.Errorf("distribution analytics not yet implemented - coming in future release")
@@ -120,9 +120,9 @@ Import Strategies:
 • skip_conflicts: Skip items that would cause conflicts
 
 Examples:
-  ghp analytics import octocat/123 --file data.json --format json --strategy merge
-  ghp analytics import octocat/123 --file items.csv --format csv --strategy append
-  ghp analytics import --org myorg/456 --file backup.xml --format xml --strategy replace`,
+  ghx analytics import octocat/123 --file data.json --format json --strategy merge
+  ghx analytics import octocat/123 --file items.csv --format csv --strategy append
+  ghx analytics import --org myorg/456 --file backup.xml --format xml --strategy replace`,
 
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return fmt.Errorf("import functionality not yet implemented - coming in future release")
@@ -154,9 +154,9 @@ This command allows you to delete multiple project items at once.
 The operation runs asynchronously and provides an operation ID for tracking.
 
 Examples:
-  ghp analytics bulk-delete octocat/123 --items item1,item2,item3
-  ghp analytics bulk-delete octocat/123 --items item1,item2 --format json
-  ghp analytics bulk-delete --org myorg/456 --items item1,item2,item3 --confirm`,
+  ghx analytics bulk-delete octocat/123 --items item1,item2,item3
+  ghx analytics bulk-delete octocat/123 --items item1,item2 --format json
+  ghx analytics bulk-delete --org myorg/456 --items item1,item2,item3 --confirm`,
 
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return fmt.Errorf("bulk delete functionality not yet implemented - coming in future release")
@@ -185,9 +185,9 @@ Archived items are hidden from normal views but remain accessible
 and can be unarchived if needed.
 
 Examples:
-  ghp analytics bulk-archive octocat/123 --items item1,item2,item3
-  ghp analytics bulk-archive octocat/123 --items item1,item2 --format json
-  ghp analytics bulk-archive --org myorg/456 --items item1,item2,item3`,
+  ghx analytics bulk-archive octocat/123 --items item1,item2,item3
+  ghx analytics bulk-archive octocat/123 --items item1,item2 --format json
+  ghx analytics bulk-archive --org myorg/456 --items item1,item2,item3`,
 
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return fmt.Errorf("bulk archive functionality not yet implemented - coming in future release")
@@ -216,9 +216,9 @@ status information including progress, success/failure counts,
 and any error messages.
 
 Examples:
-  ghp analytics operation-status op-12345
-  ghp analytics operation-status op-12345 --format json
-  ghp analytics operation-status op-12345 --watch`,
+  ghx analytics operation-status op-12345
+  ghx analytics operation-status op-12345 --format json
+  ghx analytics operation-status op-12345 --watch`,
 
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return fmt.Errorf("operation status functionality not yet implemented - coming in future release")

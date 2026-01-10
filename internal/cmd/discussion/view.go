@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ViewOptions holds options for the view command
@@ -33,9 +33,9 @@ func NewViewCmd() *cobra.Command {
 
 This command displays the full discussion content including title, body,
 category, state, and optionally comments.`,
-		Example: `  ghp discussion view owner/repo 123              # View discussion #123
-  ghp discussion view owner/repo 123 --comments 10 # Show 10 comments
-  ghp discussion view owner/repo 123 --format json # Output as JSON`,
+		Example: `  ghx discussion view owner/repo 123              # View discussion #123
+  ghx discussion view owner/repo 123 --comments 10 # Show 10 comments
+  ghx discussion view owner/repo 123 --format json # Output as JSON`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

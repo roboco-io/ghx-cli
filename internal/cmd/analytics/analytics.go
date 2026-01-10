@@ -45,11 +45,11 @@ Import Strategies:
   skip_conflicts - Skip items that would cause conflicts
 
 Examples:
-  ghp analytics overview octocat/123
-  ghp analytics velocity octocat/123 --period monthly
-  ghp analytics export octocat/123 --format json --include-all
-  ghp analytics import octocat/123 --file data.json --strategy merge
-  ghp analytics bulk-update octocat/123 --items item1,item2 --field status --value Done`,
+  ghx analytics overview octocat/123
+  ghx analytics velocity octocat/123 --period monthly
+  ghx analytics export octocat/123 --format json --include-all
+  ghx analytics import octocat/123 --file data.json --strategy merge
+  ghx analytics bulk-update octocat/123 --items item1,item2 --field status --value Done`,
 
 		Args: cobra.NoArgs,
 	}

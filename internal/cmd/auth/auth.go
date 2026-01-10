@@ -25,8 +25,8 @@ For initial setup, authenticate with GitHub CLI:
 
 For more information about GitHub CLI authentication:
 https://docs.github.com/en/github-cli/github-cli/about-github-cli`,
-		Example: `  ghp auth status                     # Check authentication status
-  ghp auth status --format json       # Show status as JSON`,
+		Example: `  ghx auth status                     # Check authentication status
+  ghx auth status --format json       # Show status as JSON`,
 	}
 
 	// Add subcommands

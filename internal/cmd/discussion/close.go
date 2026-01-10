@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // CloseOptions holds options for the close command
@@ -34,9 +34,9 @@ Valid reasons:
   - resolved (default): The discussion has been resolved
   - outdated: The discussion is no longer relevant
   - duplicate: The discussion is a duplicate of another`,
-		Example: `  ghp discussion close owner/repo 123
-  ghp discussion close owner/repo 123 --reason resolved
-  ghp discussion close owner/repo 123 --reason outdated`,
+		Example: `  ghx discussion close owner/repo 123
+  ghx discussion close owner/repo 123 --reason resolved
+  ghx discussion close owner/repo 123 --reason outdated`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

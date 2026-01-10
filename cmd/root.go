@@ -7,13 +7,13 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/roboco-io/gh-project-cli/internal/cmd/analytics"
-	"github.com/roboco-io/gh-project-cli/internal/cmd/auth"
-	"github.com/roboco-io/gh-project-cli/internal/cmd/discussion"
-	"github.com/roboco-io/gh-project-cli/internal/cmd/field"
-	"github.com/roboco-io/gh-project-cli/internal/cmd/item"
-	"github.com/roboco-io/gh-project-cli/internal/cmd/project"
-	"github.com/roboco-io/gh-project-cli/internal/cmd/view"
+	"github.com/roboco-io/ghx-cli/internal/cmd/analytics"
+	"github.com/roboco-io/ghx-cli/internal/cmd/auth"
+	"github.com/roboco-io/ghx-cli/internal/cmd/discussion"
+	"github.com/roboco-io/ghx-cli/internal/cmd/field"
+	"github.com/roboco-io/ghx-cli/internal/cmd/item"
+	"github.com/roboco-io/ghx-cli/internal/cmd/project"
+	"github.com/roboco-io/ghx-cli/internal/cmd/view"
 )
 
 var (
@@ -33,9 +33,9 @@ func init() {
 // NewRootCmd creates the root command
 func NewRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "ghp",
-		Short: "GitHub CLI Extension - Projects, Discussions, and more",
-		Long: `ghp-cli is a powerful command-line interface for GitHub features not covered by gh CLI.
+		Use:   "ghx",
+		Short: "GitHub eXtensions CLI - Projects, Discussions, and more",
+		Long: `ghx-cli (GitHub eXtensions) is a powerful command-line interface for GitHub features not covered by gh CLI.
 
 It provides complete control over GitHub features including:
 - Project management (create, list, edit, delete)
@@ -48,15 +48,15 @@ It provides complete control over GitHub features including:
 - Bulk operations
 
 Example:
-  ghp project list --org myorg
-  ghp project view owner/123
-  ghp discussion list owner/repo
-  ghp discussion create owner/repo --category ideas`,
+  ghx project list --org myorg
+  ghx project view owner/123
+  ghx discussion list owner/repo
+  ghx discussion create owner/repo --category ideas`,
 		Version: fmt.Sprintf("%s (commit: %s, built: %s)", version, commit, buildTime),
 	}
 
 	// Add persistent flags
-	cmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ghp.yaml)")
+	cmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ghx.yaml)")
 	cmd.PersistentFlags().String("token", "", "GitHub Personal Access Token")
 	cmd.PersistentFlags().String("org", "", "GitHub organization")
 	cmd.PersistentFlags().String("user", "", "GitHub user")
@@ -115,14 +115,14 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".ghp" (without extension)
+		// Search config in home directory with name ".ghx" (without extension)
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".ghp")
+		viper.SetConfigName(".ghx")
 	}
 
 	// Read in environment variables that match
-	viper.SetEnvPrefix("GHP")
+	viper.SetEnvPrefix("GHX")
 	viper.AutomaticEnv()
 
 	// If a config file is found, read it in

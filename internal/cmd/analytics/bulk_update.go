@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 const (
@@ -52,10 +52,10 @@ Update Options:
   --milestone          Set milestone field value
 
 Examples:
-  ghp analytics bulk-update octocat/123 --items item1,item2,item3 --status Done
-  ghp analytics bulk-update octocat/123 --items item1,item2 --assignee octocat --priority High
-  ghp analytics bulk-update octocat/123 --items item1,item2,item3 --labels bug,urgent --format json
-  ghp analytics bulk-update --org myorg/456 --items item1,item2 --field-custom-field "Custom Value"`,
+  ghx analytics bulk-update octocat/123 --items item1,item2,item3 --status Done
+  ghx analytics bulk-update octocat/123 --items item1,item2 --assignee octocat --priority High
+  ghx analytics bulk-update octocat/123 --items item1,item2,item3 --labels bug,urgent --format json
+  ghx analytics bulk-update --org myorg/456 --items item1,item2 --field-custom-field "Custom Value"`,
 
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

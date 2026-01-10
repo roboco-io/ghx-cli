@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api"
 )
 
 func TestItemService(t *testing.T) {

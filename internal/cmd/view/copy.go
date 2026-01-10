@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // CopyOptions holds options for the copy command
@@ -36,9 +36,9 @@ configuration as the original view. You can optionally copy the view to
 a different project by specifying the target project reference.
 
 Examples:
-  ghp view copy view-id "Sprint 2 Board"
-  ghp view copy view-id "Bug Dashboard" octocat/456
-  ghp view copy view-id "Roadmap Copy" --format json`,
+  ghx view copy view-id "Sprint 2 Board"
+  ghx view copy view-id "Bug Dashboard" octocat/456
+  ghx view copy view-id "Roadmap Copy" --format json`,
 
 		Args: cobra.RangeArgs(2, 3),
 		RunE: func(cmd *cobra.Command, args []string) error {

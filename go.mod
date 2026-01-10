@@ -1,4 +1,4 @@
-module github.com/roboco-io/gh-project-cli
+module github.com/roboco-io/ghx-cli
 
 go 1.23.0
 
@@ -10,6 +10,7 @@ require (
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/oauth2 v0.30.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -29,5 +30,4 @@ require (
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

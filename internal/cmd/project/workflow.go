@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // WorkflowOptions holds options for workflow commands
@@ -57,8 +57,8 @@ func NewWorkflowListCmd() *cobra.Command {
 This shows workflow rules, triggers, and current status.
 
 Examples:
-  ghp project workflow list myorg/123
-  ghp project workflow list user/456 --format json`,
+  ghx project workflow list myorg/123
+  ghx project workflow list user/456 --format json`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.ProjectID = args[0]
@@ -105,10 +105,10 @@ Available Actions:
 
 Examples:
   # Auto-add new issues to project
-  ghp project workflow create --project-id myorg/123 --name "Auto-add issues" --trigger "issue.opened" --action "add_to_project"
+  ghx project workflow create --project-id myorg/123 --name "Auto-add issues" --trigger "issue.opened" --action "add_to_project"
   
   # Set priority on critical issues  
-  ghp project workflow create --project-id myorg/123 --name "Critical priority" --trigger "issue.labeled" --condition "label=critical" --action "set_field:Priority=High"`,
+  ghx project workflow create --project-id myorg/123 --name "Critical priority" --trigger "issue.labeled" --condition "label=critical" --action "set_field:Priority=High"`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if projectID == "" || name == "" || trigger == "" || action == "" {
 				return fmt.Errorf("--project-id, --name, --trigger, and --action are required")
@@ -155,9 +155,9 @@ func NewWorkflowUpdateCmd() *cobra.Command {
 You can modify workflow properties like name and enabled status.
 
 Examples:
-  ghp project workflow update workflow_123 --name "Updated name"
-  ghp project workflow update workflow_123 --enabled
-  ghp project workflow update workflow_123 --disabled`,
+  ghx project workflow update workflow_123 --name "Updated name"
+  ghx project workflow update workflow_123 --enabled
+  ghx project workflow update workflow_123 --disabled`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			workflowID = args[0]
@@ -187,7 +187,7 @@ func NewWorkflowDeleteCmd() *cobra.Command {
 This permanently removes the workflow and stops all automation.
 
 Examples:
-  ghp project workflow delete workflow_123`,
+  ghx project workflow delete workflow_123`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			workflowID := args[0]
@@ -210,8 +210,8 @@ func NewWorkflowStatusCmd() *cobra.Command {
 This displays workflow performance metrics, success rates, and recent executions.
 
 Examples:
-  ghp project workflow status myorg/123
-  ghp project workflow status user/456 --format json`,
+  ghx project workflow status myorg/123
+  ghx project workflow status user/456 --format json`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.ProjectID = args[0]

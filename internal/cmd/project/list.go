@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ListOptions holds options for the list command
@@ -32,9 +32,9 @@ func NewListCmd() *cobra.Command {
 		Long: `List projects for a user or organization.
 
 Examples:
-  ghp project list              # List projects for authenticated user
-  ghp project list octocat      # List projects for user octocat
-  ghp project list --org myorg  # List projects for organization myorg`,
+  ghx project list              # List projects for authenticated user
+  ghx project list octocat      # List projects for user octocat
+  ghx project list --org myorg  # List projects for organization myorg`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runList(cmd.Context(), opts, args)

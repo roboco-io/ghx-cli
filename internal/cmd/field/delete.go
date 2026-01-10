@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // NewDeleteCmd creates the delete command
@@ -23,8 +23,8 @@ By default, this command will prompt for confirmation. Use --force to skip
 the confirmation prompt.
 
 Examples:
-  ghp field delete field-id
-  ghp field delete field-id --force`,
+  ghx field delete field-id
+  ghx field delete field-id --force`,
 		ItemType: "field",
 		ServiceAction: func(ctx context.Context, client *api.Client, fieldID string) error {
 			fieldService := service.NewFieldService(client)

@@ -33,12 +33,12 @@ Field Types:
 For more information about GitHub Projects fields, visit:
 https://docs.github.com/en/issues/planning-and-tracking-with-projects`,
 
-		Example: `  ghp field list octocat/123                    # List fields in project
-  ghp field create octocat/123 "Priority" text     # Create text field
-  ghp field create octocat/123 "Status" single_select --options "Todo,In Progress,Done"
-  ghp field update field-id --name "New Priority"  # Rename field
-  ghp field delete field-id --force                # Delete field
-  ghp field add-option field-id "Critical" --color red  # Add select option`,
+		Example: `  ghx field list octocat/123                    # List fields in project
+  ghx field create octocat/123 "Priority" text     # Create text field
+  ghx field create octocat/123 "Status" single_select --options "Todo,In Progress,Done"
+  ghx field update field-id --name "New Priority"  # Rename field
+  ghx field delete field-id --force                # Delete field
+  ghx field add-option field-id "Critical" --color red  # Add select option`,
 	}
 
 	// Add subcommands

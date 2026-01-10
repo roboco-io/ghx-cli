@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 const (
@@ -40,9 +40,9 @@ data types and configuration. For single select fields, it also shows
 the available options.
 
 Examples:
-  ghp field list octocat/123        # List fields in project 123
-  ghp field list --org myorg/456    # List fields in org project 456
-  ghp field list octocat/123 --format json  # JSON output`,
+  ghx field list octocat/123        # List fields in project 123
+  ghx field list --org myorg/456    # List fields in org project 456
+  ghx field list octocat/123 --format json  # JSON output`,
 
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // DeleteOptions holds options for the delete command
@@ -33,9 +33,9 @@ func NewDeleteCmd() *cobra.Command {
 ⚠️  WARNING: This action cannot be undone. All project data will be permanently deleted.
 
 Examples:
-  ghp project delete 123 --force           # Delete project 123 (with confirmation)
-  ghp project delete octocat/123 --force   # Delete project owned by octocat
-  ghp project delete myorg/456 --org --force  # Delete org project`,
+  ghx project delete 123 --force           # Delete project 123 (with confirmation)
+  ghx project delete octocat/123 --force   # Delete project owned by octocat
+  ghx project delete myorg/456 --org --force  # Delete org project`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runDelete(cmd.Context(), opts, args)

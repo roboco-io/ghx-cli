@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ReopenOptions holds options for the reopen command
@@ -28,8 +28,8 @@ func NewReopenCmd() *cobra.Command {
 		Use:   "reopen <owner/repo> <number>",
 		Short: "Reopen a closed discussion",
 		Long:  `Reopen a previously closed discussion.`,
-		Example: `  ghp discussion reopen owner/repo 123
-  ghp discussion reopen owner/repo 123 --format json`,
+		Example: `  ghx discussion reopen owner/repo 123
+  ghx discussion reopen owner/repo 123 --format json`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

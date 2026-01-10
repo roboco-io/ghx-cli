@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // CreateOptions holds options for the create command
@@ -41,10 +41,10 @@ View Layouts:
   roadmap     - Timeline roadmap for milestone planning
 
 Examples:
-  ghp view create octocat/123 "Sprint Dashboard" table
-  ghp view create octocat/123 "Bug Board" board --filter "label:bug"
-  ghp view create --org myorg/456 "Release Roadmap" roadmap
-  ghp view create octocat/123 "High Priority" table --filter "priority:high" --format json`,
+  ghx view create octocat/123 "Sprint Dashboard" table
+  ghx view create octocat/123 "Bug Board" board --filter "label:bug"
+  ghx view create --org myorg/456 "Release Roadmap" roadmap
+  ghx view create octocat/123 "High Priority" table --filter "priority:high" --format json`,
 
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {

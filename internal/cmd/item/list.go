@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 const (
@@ -56,11 +56,11 @@ You can list items from a specific repository or search across all of GitHub
 using various filters.
 
 Examples:
-  ghp item list octocat/Hello-World                    # List items from repository
-  ghp item list octocat/Hello-World --type issue       # List only issues
-  ghp item list --search "is:issue is:open bug"       # Search across GitHub
-  ghp item list --author octocat --state open          # Find items by author
-  ghp item list --assignee @me --type pr               # Find PRs assigned to you`,
+  ghx item list octocat/Hello-World                    # List items from repository
+  ghx item list octocat/Hello-World --type issue       # List only issues
+  ghx item list --search "is:issue is:open bug"       # Search across GitHub
+  ghx item list --author octocat --state open          # Find items by author
+  ghx item list --assignee @me --type pr               # Find PRs assigned to you`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {

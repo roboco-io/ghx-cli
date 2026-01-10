@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // CreateOptions holds options for the create command
@@ -35,11 +35,11 @@ func NewCreateCmd() *cobra.Command {
 		Long: `Create a new project for a user or organization.
 
 Examples:
-  ghp project create "My Project"                           # Basic project creation
-  ghp project create "My Project" --description "A project" # With description
-  ghp project create "My Project" --readme "Detailed info"  # With README
-  ghp project create "My Project" --visibility private      # Private project
-  ghp project create "My Project" --repo owner/repo         # Link to repository`,
+  ghx project create "My Project"                           # Basic project creation
+  ghx project create "My Project" --description "A project" # With description
+  ghx project create "My Project" --readme "Detailed info"  # With README
+  ghx project create "My Project" --visibility private      # Private project
+  ghx project create "My Project" --repo owner/repo         # Link to repository`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runCreate(cmd.Context(), opts, args)

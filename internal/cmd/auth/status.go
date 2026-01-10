@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/auth"
 )
 
 // StatusOptions holds options for the status command
@@ -31,8 +31,8 @@ This command checks:
 • Required scopes for GitHub Projects
 
 Examples:
-  ghp auth status                 # Show status in table format
-  ghp auth status --format json  # Show status as JSON`,
+  ghx auth status                 # Show status in table format
+  ghx auth status --format json  # Show status as JSON`,
 		RunE: func(_ *cobra.Command, _ []string) error {
 			return runStatus(opts)
 		},

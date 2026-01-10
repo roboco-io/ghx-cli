@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // RemoveOptions holds options for the remove command
@@ -34,8 +34,8 @@ You can find item IDs by listing project items or using the GitHub web interface
 but the underlying issue or PR will remain unchanged.
 
 Examples:
-  ghp item remove octocat/1 PVTI_lADOANN5s84ACbL0zgBZrOY    # Remove item from project
-  ghp item remove myorg/2 item-123 --force                  # Skip confirmation`,
+  ghx item remove octocat/1 PVTI_lADOANN5s84ACbL0zgBZrOY    # Remove item from project
+  ghx item remove myorg/2 item-123 --force                  # Skip confirmation`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.ProjectRef = args[0]

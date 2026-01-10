@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // outputViewDetailsTable outputs common view details in table format
@@ -286,10 +286,10 @@ Group Directions:
   desc, descending  - Group in descending order (Z-A, 9-1, newest first)
 
 Examples:
-  ghp view group view-id --field status-field-id --direction asc
-  ghp view group view-id --field assignee-field-id --direction desc
-  ghp view group view-id --clear
-  ghp view group view-id --field priority-field-id --direction desc --format json`
+  ghx view group view-id --field status-field-id --direction asc
+  ghx view group view-id --field assignee-field-id --direction desc
+  ghx view group view-id --clear
+  ghx view group view-id --field priority-field-id --direction desc --format json`
 }
 
 // sortLongDescription returns the long description for the sort command
@@ -304,8 +304,8 @@ Sort Directions:
   desc, descending  - Sort in descending order (Z-A, 9-1, newest first)
 
 Examples:
-  ghp view sort view-id --field priority-field-id --direction desc
-  ghp view sort view-id --field status-field-id --direction asc
-  ghp view sort view-id --clear
-  ghp view sort view-id --field due-date-field-id --direction asc --format json`
+  ghx view sort view-id --field priority-field-id --direction desc
+  ghx view sort view-id --field status-field-id --direction asc
+  ghx view sort view-id --clear
+  ghx view sort view-id --field due-date-field-id --direction asc --format json`
 }

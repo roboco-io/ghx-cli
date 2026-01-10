@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // AddOptionOptions holds options for the add-option command
@@ -36,9 +36,9 @@ and an optional description for the new option.
 Available colors: gray, red, orange, yellow, green, blue, purple, pink
 
 Examples:
-  ghp field add-option field-id "Critical"
-  ghp field add-option field-id "High" --color red
-  ghp field add-option field-id "Urgent" --color red --description "Requires immediate attention"`,
+  ghx field add-option field-id "Critical"
+  ghx field add-option field-id "High" --color red
+  ghx field add-option field-id "Urgent" --color red --description "Requires immediate attention"`,
 
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // UpdateOptions holds options for the update command
@@ -32,8 +32,8 @@ Currently, you can update the field name. Other field properties like
 data type cannot be changed after creation.
 
 Examples:
-  ghp field update field-id --name "New Priority"
-  ghp field update field-id --name "Status Category" --format json`,
+  ghx field update field-id --name "New Priority"
+  ghx field update field-id --name "Status Category" --format json`,
 
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

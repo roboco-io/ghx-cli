@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // EditOptions holds options for the edit command
@@ -40,9 +40,9 @@ Field values can be:
 • Dates in YYYY-MM-DD format for date fields
 
 Examples:
-  ghp item edit octocat/1 PVTI_123 --field "Status" --value "In Progress"
-  ghp item edit myorg/2 item-456 --field "Priority" --value "High"
-  ghp item edit octocat/1 PVTI_789 --field "Due Date" --value "2024-12-31"`,
+  ghx item edit octocat/1 PVTI_123 --field "Status" --value "In Progress"
+  ghx item edit myorg/2 item-456 --field "Priority" --value "High"
+  ghx item edit octocat/1 PVTI_789 --field "Due Date" --value "2024-12-31"`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.ProjectRef = args[0]

@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ImportOptions holds options for the import command
@@ -33,9 +33,9 @@ This command recreates a project with all its configuration, items, fields, and 
 from an exported backup file.
 
 Examples:
-  ghp project import --file project-backup.json --owner myorg
-  ghp project import --file backup.json --owner myuser --dry-run
-  ghp project import --file export.json --owner myorg --skip-items`,
+  ghx project import --file project-backup.json --owner myorg
+  ghx project import --file backup.json --owner myuser --dry-run
+  ghx project import --file export.json --owner myorg --skip-items`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runImport(cmd.Context(), opts)
 		},

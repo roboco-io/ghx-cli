@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ExportOptions holds options for the export command
@@ -36,9 +36,9 @@ func NewExportCmd() *cobra.Command {
 This creates a backup file that can be used to restore the project or migrate to another location.
 
 Examples:
-  ghp project export myorg/123 --output project-backup.json
-  ghp project export user/456 --output backup.json --format yaml
-  ghp project export myorg/123 --output full-backup.json --include-all`,
+  ghx project export myorg/123 --output project-backup.json
+  ghx project export user/456 --output backup.json --format yaml
+  ghx project export myorg/123 --output full-backup.json --include-all`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runExport(cmd.Context(), opts, args)

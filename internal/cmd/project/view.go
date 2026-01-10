@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ViewOptions holds options for the view command
@@ -35,9 +35,9 @@ func NewViewCmd() *cobra.Command {
 		Long: `View details of a specific project.
 
 Examples:
-  ghp project view 123               # View project 123 in current repository context
-  ghp project view octocat/123       # View project 123 owned by octocat
-  ghp project view --org myorg/456   # View project 456 owned by organization myorg`,
+  ghx project view 123               # View project 123 in current repository context
+  ghx project view octocat/123       # View project 123 owned by octocat
+  ghx project view --org myorg/456   # View project 456 owned by organization myorg`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runView(cmd.Context(), opts, args)

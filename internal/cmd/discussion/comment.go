@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // CommentOptions holds options for the comment command
@@ -33,8 +33,8 @@ func NewCommentCmd() *cobra.Command {
 		Long: `Add a comment to an existing discussion.
 
 You can reply to a specific comment by using the --reply-to flag with the comment ID.`,
-		Example: `  ghp discussion comment owner/repo 123 --body "This is my comment"
-  ghp discussion comment owner/repo 123 -b "Reply to comment" --reply-to DC_xxx`,
+		Example: `  ghx discussion comment owner/repo 123 --body "This is my comment"
+  ghx discussion comment owner/repo 123 -b "Reply to comment" --reply-to DC_xxx`,
 		Args: cobra.ExactArgs(2),
 		PreRunE: func(_ *cobra.Command, _ []string) error {
 			if replyTo != "" {

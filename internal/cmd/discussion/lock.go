@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // LockOptions holds options for the lock command
@@ -33,9 +33,9 @@ Valid reasons:
   - resolved: The discussion has been resolved
   - spam: The discussion contains spam
   - too_heated: The discussion has become too heated`,
-		Example: `  ghp discussion lock owner/repo 123
-  ghp discussion lock owner/repo 123 --reason resolved
-  ghp discussion lock owner/repo 123 --reason spam`,
+		Example: `  ghx discussion lock owner/repo 123
+  ghx discussion lock owner/repo 123 --reason resolved
+  ghx discussion lock owner/repo 123 --reason spam`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

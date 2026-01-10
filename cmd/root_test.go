@@ -12,7 +12,7 @@ func TestRootCommand(t *testing.T) {
 	t.Run("Root command exists", func(t *testing.T) {
 		cmd := NewRootCmd()
 		assert.NotNil(t, cmd)
-		assert.Equal(t, "ghp", cmd.Use)
+		assert.Equal(t, "ghx", cmd.Use)
 	})
 
 	t.Run("Root command has description", func(t *testing.T) {
@@ -50,7 +50,7 @@ func TestRootCommand(t *testing.T) {
 
 		output := buf.String()
 		assert.Contains(t, output, "command-line interface for GitHub features")
-		assert.Contains(t, output, "ghp")
+		assert.Contains(t, output, "ghx")
 	})
 
 	t.Run("Invalid command shows error", func(t *testing.T) {

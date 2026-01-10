@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // DeleteOptions holds options for the delete command
@@ -33,8 +33,8 @@ func NewDeleteCmd() *cobra.Command {
 
 This action is irreversible. All comments and replies will also be deleted.
 You will be prompted to confirm unless --force is used.`,
-		Example: `  ghp discussion delete owner/repo 123
-  ghp discussion delete owner/repo 123 --force`,
+		Example: `  ghx discussion delete owner/repo 123
+  ghx discussion delete owner/repo 123 --force`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

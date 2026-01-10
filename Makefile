@@ -1,4 +1,4 @@
-# ghp-cli Makefile
+# ghx-cli Makefile
 
 # Go parameters
 GOCMD=go
@@ -9,7 +9,7 @@ GOGET=$(GOCMD) get
 GOMOD=$(GOCMD) mod
 GOFMT=gofmt
 GOLINT=golangci-lint
-BINARY_NAME=ghp
+BINARY_NAME=ghx
 BINARY_PATH=bin/$(BINARY_NAME)
 
 # Version info
@@ -36,7 +36,7 @@ all: test build
 build:
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p bin
-	$(GOBUILD) $(LDFLAGS) -o $(BINARY_PATH) ./cmd/ghp
+	$(GOBUILD) $(LDFLAGS) -o $(BINARY_PATH) ./cmd/ghx
 
 ## clean: Remove build artifacts
 clean:
@@ -62,14 +62,14 @@ test-integration:
 ## test-e2e: Run E2E tests (requires GITHUB_TOKEN or gh auth)
 test-e2e: build
 	@echo "Running E2E tests..."
-	@echo "Note: Set GHP_TEST_REPO=owner/repo to use a different test repository"
+	@echo "Note: Set GHX_TEST_REPO=owner/repo to use a different test repository"
 	$(GOTEST) -v -timeout $(TEST_TIMEOUT) ./test/e2e/...
 
 ## test-e2e-write: Run E2E tests including write operations (creates/deletes discussions)
 test-e2e-write: build
 	@echo "Running E2E tests with write operations..."
 	@echo "WARNING: This will create and delete discussions in the test repository"
-	GHP_E2E_WRITE_TESTS=1 $(GOTEST) -v -timeout $(TEST_TIMEOUT) ./test/e2e/...
+	GHX_E2E_WRITE_TESTS=1 $(GOTEST) -v -timeout $(TEST_TIMEOUT) ./test/e2e/...
 
 ## test-all: Run all tests (unit, integration, e2e)
 test-all: test test-e2e
@@ -136,12 +136,12 @@ install-tools:
 ## run: Run the application
 run:
 	@echo "Running $(BINARY_NAME)..."
-	$(GOCMD) run ./cmd/ghp
+	$(GOCMD) run ./cmd/ghx
 
 ## docker-build: Build Docker image
 docker-build:
 	@echo "Building Docker image..."
-	@docker build -t ghp-cli:$(VERSION) .
+	@docker build -t ghx-cli:$(VERSION) .
 
 ## release: Create a new release
 release:

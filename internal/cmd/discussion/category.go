@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // CategoryListOptions holds options for the category list command
@@ -28,7 +28,7 @@ func NewCategoryCmd() *cobra.Command {
 
 Note: GitHub only allows creating and modifying categories through the web UI.
 This command can list existing categories.`,
-		Example: `  ghp discussion category list owner/repo`,
+		Example: `  ghx discussion category list owner/repo`,
 	}
 
 	cmd.AddCommand(NewCategoryListCmd())
@@ -46,8 +46,8 @@ func NewCategoryListCmd() *cobra.Command {
 		Long: `List all discussion categories for a repository.
 
 Categories define the type of discussion and determine whether answers can be marked.`,
-		Example: `  ghp discussion category list owner/repo
-  ghp discussion category list owner/repo --format json`,
+		Example: `  ghx discussion category list owner/repo
+  ghx discussion category list owner/repo --format json`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

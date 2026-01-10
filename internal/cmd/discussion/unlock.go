@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // UnlockOptions holds options for the unlock command
@@ -26,7 +26,7 @@ func NewUnlockCmd() *cobra.Command {
 		Use:     "unlock <owner/repo> <number>",
 		Short:   "Unlock a discussion",
 		Long:    `Unlock a previously locked discussion to allow new comments.`,
-		Example: `  ghp discussion unlock owner/repo 123`,
+		Example: `  ghx discussion unlock owner/repo 123`,
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // EditOptions holds options for the edit command
@@ -35,9 +35,9 @@ func NewEditCmd() *cobra.Command {
 		Long: `Edit an existing project.
 
 Examples:
-  ghp project edit 123 --title "New Title"      # Edit project title
-  ghp project edit octocat/123 --close          # Close project
-  ghp project edit myorg/456 --reopen --org     # Reopen org project`,
+  ghx project edit 123 --title "New Title"      # Edit project title
+  ghx project edit octocat/123 --close          # Close project
+  ghx project edit myorg/456 --reopen --org     # Reopen org project`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runEdit(cmd.Context(), opts, args)

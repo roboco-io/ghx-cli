@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ExportOptions holds options for the export command
@@ -53,10 +53,10 @@ Filter Options:
   --filter             Apply filter to limit exported items (e.g., "status:open", "assignee:octocat")
 
 Examples:
-  ghp analytics export octocat/123 --format json --include-all
-  ghp analytics export octocat/123 --format csv --include-items --include-fields
-  ghp analytics export octocat/123 --format xml --filter "status:open" --output json
-  ghp analytics export --org myorg/456 --format json --include-workflows`,
+  ghx analytics export octocat/123 --format json --include-all
+  ghx analytics export octocat/123 --format csv --include-items --include-fields
+  ghx analytics export octocat/123 --format xml --filter "status:open" --output json
+  ghx analytics export --org myorg/456 --format json --include-workflows`,
 
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

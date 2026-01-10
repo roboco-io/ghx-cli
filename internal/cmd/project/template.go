@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // TemplateOptions holds options for template commands
@@ -64,8 +64,8 @@ func NewTemplateListCmd() *cobra.Command {
 Templates are reusable configurations that can be applied to new projects.
 
 Examples:
-  ghp project template list
-  ghp project template list --format json`,
+  ghx project template list
+  ghx project template list --format json`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return runTemplateList(cmd.Context(), opts)
 		},
@@ -103,10 +103,10 @@ Available Categories:
 
 Examples:
   # Create template from existing project
-  ghp project template create --name "Sprint Planning" --project-id myorg/123 --category development
+  ghx project template create --name "Sprint Planning" --project-id myorg/123 --category development
   
   # Create template with description and tags
-  ghp project template create --name "Bug Tracking" --description "Template for bug tracking" --project-id myorg/456 --category development --tags bug,tracking,support`,
+  ghx project template create --name "Bug Tracking" --description "Template for bug tracking" --project-id myorg/456 --category development --tags bug,tracking,support`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if name == "" || projectID == "" {
 				return fmt.Errorf("--name and --project-id are required")
@@ -154,10 +154,10 @@ including fields, views, and workflow automation.
 
 Examples:
   # Apply template to create new project
-  ghp project template apply template_123 --name "Q1 Sprint Planning" --owner myorg
+  ghx project template apply template_123 --name "Q1 Sprint Planning" --owner myorg
   
   # Apply template with customization prompt
-  ghp project template apply template_456 --name "Bug Tracking" --owner myuser --customize`,
+  ghx project template apply template_456 --name "Bug Tracking" --owner myuser --customize`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			templateID = args[0]
@@ -204,8 +204,8 @@ func NewTemplateUpdateCmd() *cobra.Command {
 You can modify template metadata like name, description, category, and tags.
 
 Examples:
-  ghp project template update template_123 --name "Updated Sprint Planning"
-  ghp project template update template_456 --description "Enhanced bug tracking template" --tags bug,enhanced`,
+  ghx project template update template_123 --name "Updated Sprint Planning"
+  ghx project template update template_456 --description "Enhanced bug tracking template" --tags bug,enhanced`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			templateID := args[0]
@@ -240,8 +240,8 @@ func NewTemplateDeleteCmd() *cobra.Command {
 This permanently removes the template and its configuration.
 
 Examples:
-  ghp project template delete template_123
-  ghp project template delete template_456 --force`,
+  ghx project template delete template_123
+  ghx project template delete template_456 --force`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			templateID := args[0]
@@ -269,8 +269,8 @@ func NewTemplateExportCmd() *cobra.Command {
 This creates a backup file that can be shared or imported elsewhere.
 
 Examples:
-  ghp project template export template_123 --output sprint-template.json
-  ghp project template export template_456 --output bug-template.yaml --format yaml`,
+  ghx project template export template_123 --output sprint-template.json
+  ghx project template export template_456 --output bug-template.yaml --format yaml`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			templateID := args[0]
@@ -311,8 +311,8 @@ func NewTemplateImportCmd() *cobra.Command {
 This creates a new template from a previously exported template file.
 
 Examples:
-  ghp project template import --file sprint-template.json --name "Imported Sprint Template"
-  ghp project template import --file bug-template.yaml --name "Bug Tracking" --update`,
+  ghx project template import --file sprint-template.json --name "Imported Sprint Template"
+  ghx project template import --file bug-template.yaml --name "Bug Tracking" --update`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if file == "" || name == "" {
 				return fmt.Errorf("--file and --name are required")

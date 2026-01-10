@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // UpdateOptions holds options for the update command
@@ -33,10 +33,10 @@ You can update the view name and filter. At least one property must be specified
 The view layout cannot be changed after creation.
 
 Examples:
-  ghp view update view-id --name "Updated Dashboard"
-  ghp view update view-id --filter "status:todo"
-  ghp view update view-id --name "Sprint Board" --filter "milestone:sprint-1"
-  ghp view update view-id --name "Bug Tracking" --format json`,
+  ghx view update view-id --name "Updated Dashboard"
+  ghx view update view-id --filter "status:todo"
+  ghx view update view-id --name "Sprint Board" --filter "milestone:sprint-1"
+  ghx view update view-id --name "Bug Tracking" --format json`,
 
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

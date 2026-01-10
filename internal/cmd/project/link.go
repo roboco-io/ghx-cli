@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // LinkOptions holds options for the link command
@@ -29,8 +29,8 @@ func NewLinkCmd() *cobra.Command {
 This allows the project to automatically track issues and pull requests from the repository.
 
 Examples:
-  ghp project link myorg/123 --repo owner/repo    # Link project to repository
-  ghp project link user/456 --repo myuser/myrepo  # Link to personal repository`,
+  ghx project link myorg/123 --repo owner/repo    # Link project to repository
+  ghx project link user/456 --repo myuser/myrepo  # Link to personal repository`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runLink(cmd.Context(), opts, args)

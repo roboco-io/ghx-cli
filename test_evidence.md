@@ -2,30 +2,30 @@
 
 ## Build Status ✅
 ```bash
-$ go build -o bin/ghp ./cmd/ghp
+$ go build -o bin/ghx ./cmd/ghx
 # Build successful - no errors
 ```
 
 ## Test Results ✅
 ```bash
 $ go test ./...
-?   	github.com/roboco-io/gh-project-cli/internal/cmd/auth	[no test files]
-?   	github.com/roboco-io/gh-project-cli/internal/cmd/item	[no test files]
-?   	github.com/roboco-io/gh-project-cli/internal/cmd/project	[no test files]
-?   	github.com/roboco-io/gh-project-cli/pkg/models	[no test files]
-ok  	github.com/roboco-io/gh-project-cli/cmd	(cached)
-ok  	github.com/roboco-io/gh-project-cli/cmd/ghp	(cached)
-ok  	github.com/roboco-io/gh-project-cli/internal/api	(cached)
-ok  	github.com/roboco-io/gh-project-cli/internal/api/graphql	(cached)
-ok  	github.com/roboco-io/gh-project-cli/internal/auth	(cached)
-ok  	github.com/roboco-io/gh-project-cli/internal/service	(cached)
+?   	github.com/roboco-io/ghx-cli/internal/cmd/auth	[no test files]
+?   	github.com/roboco-io/ghx-cli/internal/cmd/item	[no test files]
+?   	github.com/roboco-io/ghx-cli/internal/cmd/project	[no test files]
+?   	github.com/roboco-io/ghx-cli/pkg/models	[no test files]
+ok  	github.com/roboco-io/ghx-cli/cmd	(cached)
+ok  	github.com/roboco-io/ghx-cli/cmd/ghx	(cached)
+ok  	github.com/roboco-io/ghx-cli/internal/api	(cached)
+ok  	github.com/roboco-io/ghx-cli/internal/api/graphql	(cached)
+ok  	github.com/roboco-io/ghx-cli/internal/auth	(cached)
+ok  	github.com/roboco-io/ghx-cli/internal/service	(cached)
 ```
 
 ## CLI Functionality Verification ✅
 
 ### Item Command Help
 ```bash
-$ ./bin/ghp item --help
+$ ./bin/ghx item --help
 Manage items in GitHub Projects.
 
 Items are the core content of GitHub Projects - they can be existing issues,
@@ -44,14 +44,14 @@ For more information about GitHub Projects, visit:
 https://docs.github.com/en/issues/planning-and-tracking-with-projects
 
 Usage:
-  ghp item [command]
+  ghx item [command]
 
 Examples:
-  ghp item list octocat/Hello-World               # List items from repository
-  ghp item add octocat/1 octocat/Hello-World#123  # Add issue to project
-  ghp item view octocat/Hello-World#456           # View item details
-  ghp item remove myorg/2 item-id --force         # Remove item from project
-  ghp item add octocat/1 --draft --title "Task"   # Create draft issue
+  ghx item list octocat/Hello-World               # List items from repository
+  ghx item add octocat/1 octocat/Hello-World#123  # Add issue to project
+  ghx item view octocat/Hello-World#456           # View item details
+  ghx item remove myorg/2 item-id --force         # Remove item from project
+  ghx item add octocat/1 --draft --title "Task"   # Create draft issue
 
 Available Commands:
   add         Add an item to a project
@@ -64,7 +64,7 @@ Flags:
   -h, --help   help for item
 
 Global Flags:
-      --config string   config file (default is $HOME/.ghp.yaml)
+      --config string   config file (default is $HOME/.ghx.yaml)
       --debug           Enable debug output
       --format string   Output format (table, json, yaml) (default "table")
       --no-cache        Disable caching
@@ -72,12 +72,12 @@ Global Flags:
       --token string    GitHub Personal Access Token
       --user string     GitHub user
 
-Use "ghp item [command] --help" for more information about a command.
+Use "ghx item [command] --help" for more information about a command.
 ```
 
 ### Authentication Status Verification
 ```bash
-$ ./bin/ghp auth status
+$ ./bin/ghx auth status
 GitHub CLI Authentication Status
 ================================
 
@@ -178,9 +178,9 @@ Date:   Sun Aug 24 20:45:41 2025 +0900
     • Draft issue creation and management
     
     🔧 CLI Commands:
-    • ghp item add - Add existing issues/PRs to projects or create draft issues
-    • ghp item list - List and search items with advanced filtering
-    • ghp item view - View detailed item information
-    • ghp item edit - Update item field values
-    • ghp item remove - Remove items from projects
+    • ghx item add - Add existing issues/PRs to projects or create draft issues
+    • ghx item list - List and search items with advanced filtering
+    • ghx item view - View detailed item information
+    • ghx item edit - Update item field values
+    • ghx item remove - Remove items from projects
 ```

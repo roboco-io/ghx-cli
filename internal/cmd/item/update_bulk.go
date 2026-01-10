@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // NewUpdateBulkCmd creates the update-bulk command
@@ -33,13 +33,13 @@ This command allows you to update the same field for multiple items at once usin
 
 Examples:
   # Update all items with specific label
-  ghp item update-bulk myorg/123 --filter "label:epic" --field "Status" --value "Todo"
+  ghx item update-bulk myorg/123 --filter "label:epic" --field "Status" --value "Todo"
   
   # Update items by number range
-  ghp item update-bulk myorg/123 --items 34-46 --field "Status" --value "In Progress"
+  ghx item update-bulk myorg/123 --items 34-46 --field "Status" --value "In Progress"
   
   # Update all items matching a filter
-  ghp item update-bulk myorg/123 --filter "assignee:@me" --field "Priority" --value "High"`,
+  ghx item update-bulk myorg/123 --filter "assignee:@me" --field "Priority" --value "High"`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runUpdateBulk(cmd.Context(), args[0], filter, items, fieldName, value)

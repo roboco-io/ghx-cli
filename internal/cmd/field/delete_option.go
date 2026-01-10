@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // NewDeleteOptionCmd creates the delete-option command
@@ -23,8 +23,8 @@ By default, this command will prompt for confirmation. Use --force to skip
 the confirmation prompt.
 
 Examples:
-  ghp field delete-option option-id
-  ghp field delete-option option-id --force`,
+  ghx field delete-option option-id
+  ghx field delete-option option-id --force`,
 		ItemType: "field option",
 		ServiceAction: func(ctx context.Context, client *api.Client, optionID string) error {
 			fieldService := service.NewFieldService(client)

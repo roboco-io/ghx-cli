@@ -21,12 +21,12 @@ This command group provides comprehensive discussion management capabilities inc
 
 For more information about GitHub Discussions, visit:
 https://docs.github.com/en/discussions`,
-		Example: `  ghp discussion list owner/repo              # List discussions
-  ghp discussion view owner/repo 123          # View discussion #123
-  ghp discussion create owner/repo            # Create a discussion
-  ghp discussion close owner/repo 123         # Close discussion #123
-  ghp discussion comment owner/repo 123       # Add a comment
-  ghp discussion category list owner/repo     # List categories`,
+		Example: `  ghx discussion list owner/repo              # List discussions
+  ghx discussion view owner/repo 123          # View discussion #123
+  ghx discussion create owner/repo            # Create a discussion
+  ghx discussion close owner/repo 123         # Close discussion #123
+  ghx discussion comment owner/repo 123       # Add a comment
+  ghx discussion category list owner/repo     # List categories`,
 		Aliases: []string{"disc", "discussions"},
 	}
 

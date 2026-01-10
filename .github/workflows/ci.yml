@@ -96,7 +96,7 @@ jobs:
     - name: Run E2E tests
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GHP_TEST_REPO: ${{ github.repository }}
+        GHX_TEST_REPO: ${{ github.repository }}
       run: make test-e2e
 
   build:
@@ -117,7 +117,7 @@ jobs:
       run: make build
 
     - name: Test binary
-      run: ./bin/ghp --version
+      run: ./bin/ghx --version
 
   security:
     name: Security Scan

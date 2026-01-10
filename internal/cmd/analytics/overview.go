@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 const (
@@ -45,9 +45,9 @@ making it easy to understand the current state and identify potential
 bottlenecks or areas that need attention.
 
 Examples:
-  ghp analytics overview octocat/123
-  ghp analytics overview octocat/123 --format json
-  ghp analytics overview --org myorg/456 --format table`,
+  ghx analytics overview octocat/123
+  ghx analytics overview octocat/123 --format json
+  ghx analytics overview --org myorg/456 --format table`,
 
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

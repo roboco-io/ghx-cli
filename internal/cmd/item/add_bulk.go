@@ -10,10 +10,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 type bulkAddOptions struct {
@@ -38,13 +38,13 @@ This command allows you to add multiple items at once using various methods:
 
 Examples:
   # Add issues by number range
-  ghp item add-bulk myorg/123 --issues 34-46
+  ghx item add-bulk myorg/123 --issues 34-46
   
   # Add all issues with a specific label
-  ghp item add-bulk myorg/123 --label epic
+  ghx item add-bulk myorg/123 --label epic
   
   # Add issues from a file (one per line)
-  ghp item add-bulk myorg/123 --from-file issue-list.txt`,
+  ghx item add-bulk myorg/123 --from-file issue-list.txt`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return executeBulkAdd(cmd.Context(), args[0], opts)

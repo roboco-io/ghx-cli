@@ -7,10 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // CreateOptions holds options for the create command
@@ -51,15 +51,15 @@ For iteration fields, you can specify duration using --duration.
 
 Examples:
   # Traditional syntax
-  ghp field create octocat/123 "Priority" text
+  ghx field create octocat/123 "Priority" text
   
   # New syntax with flags (Issue #18)
-  ghp field create --project-id PROJECT_ID --name "Priority" --type single-select --options "Critical,High,Medium,Low"
-  ghp field create --project-id PROJECT_ID --name "Sprint" --type iteration --duration 2w
-  ghp field create octocat/123 "Story Points" number
-  ghp field create octocat/123 "Due Date" date
-  ghp field create octocat/123 "Status" single_select --options "Todo,In Progress,Done"
-  ghp field create --org myorg/456 "Sprint" iteration`,
+  ghx field create --project-id PROJECT_ID --name "Priority" --type single-select --options "Critical,High,Medium,Low"
+  ghx field create --project-id PROJECT_ID --name "Sprint" --type iteration --duration 2w
+  ghx field create octocat/123 "Story Points" number
+  ghx field create octocat/123 "Due Date" date
+  ghx field create octocat/123 "Status" single_select --options "Todo,In Progress,Done"
+  ghx field create --org myorg/456 "Sprint" iteration`,
 
 		Args: cobra.MaximumNArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -21,12 +21,12 @@ This command group provides comprehensive project management capabilities includ
 
 For more information about GitHub Projects, visit:
 https://docs.github.com/en/issues/planning-and-tracking-with-projects`,
-		Example: `  ghp project list                    # List projects for authenticated user
-  ghp project list octocat            # List projects for user octocat
-  ghp project view octocat/123        # View project details
-  ghp project create "My Project"     # Create a new project
-  ghp project edit 123 --title "New"  # Edit project title
-  ghp project delete 123 --force      # Delete a project`,
+		Example: `  ghx project list                    # List projects for authenticated user
+  ghx project list octocat            # List projects for user octocat
+  ghx project view octocat/123        # View project details
+  ghx project create "My Project"     # Create a new project
+  ghx project edit 123 --title "New"  # Edit project title
+  ghx project delete 123 --force      # Delete a project`,
 	}
 
 	// Add subcommands

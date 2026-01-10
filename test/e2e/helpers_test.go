@@ -12,11 +12,12 @@ import (
 
 const (
 	// Environment variable names
-	envTestRepo  = "GHP_TEST_REPO"  // e.g., "owner/repo"
-	envTestToken = "GHP_TEST_TOKEN" // GitHub token for testing
-	envSkipE2E   = "GHP_SKIP_E2E"   // Set to "1" to skip E2E tests
+	envTestRepo  = "GHX_TEST_REPO"  // e.g., "owner/repo"
+	envTestToken = "GHX_TEST_TOKEN" // GitHub token for testing
+	envSkipE2E   = "GHX_SKIP_E2E"   // Set to "1" to skip E2E tests
 
 	// Default test repository (can be overridden via env)
+	// Note: Uses gh-project-cli (actual repo name) until GitHub repo is renamed
 	defaultTestRepo = "roboco-io/gh-project-cli"
 
 	// Timeouts
@@ -37,7 +38,7 @@ func GetTestConfig(t *testing.T) *TestConfig {
 
 	// Skip if explicitly disabled
 	if os.Getenv(envSkipE2E) == "1" {
-		t.Skip("E2E tests disabled via GHP_SKIP_E2E=1")
+		t.Skip("E2E tests disabled via GHX_SKIP_E2E=1")
 	}
 
 	// Skip in short mode
@@ -51,7 +52,7 @@ func GetTestConfig(t *testing.T) *TestConfig {
 		token = os.Getenv("GITHUB_TOKEN")
 	}
 	if token == "" {
-		token = os.Getenv("GHP_TOKEN")
+		token = os.Getenv("GHX_TOKEN")
 	}
 	if token == "" {
 		// Try to get from gh CLI
@@ -61,7 +62,7 @@ func GetTestConfig(t *testing.T) *TestConfig {
 		}
 	}
 	if token == "" {
-		t.Skip("No GitHub token available for E2E tests (set GHP_TEST_TOKEN, GITHUB_TOKEN, or login via gh auth)")
+		t.Skip("No GitHub token available for E2E tests (set GHX_TEST_TOKEN, GITHUB_TOKEN, or login via gh auth)")
 	}
 
 	// Get test repository
@@ -86,15 +87,15 @@ func GetTestConfig(t *testing.T) *TestConfig {
 	}
 }
 
-// findBinary locates the ghp binary for testing
+// findBinary locates the ghx binary for testing
 func findBinary(t *testing.T) string {
 	t.Helper()
 
 	// Try common locations
 	paths := []string{
-		"./bin/ghp",
-		"../../bin/ghp",
-		os.Getenv("GOPATH") + "/bin/ghp",
+		"./bin/ghx",
+		"../../bin/ghx",
+		os.Getenv("GOPATH") + "/bin/ghx",
 	}
 
 	for _, p := range paths {
@@ -104,13 +105,13 @@ func findBinary(t *testing.T) string {
 	}
 
 	// Try to build it
-	t.Log("Building ghp binary for E2E tests...")
-	cmd := exec.Command("go", "build", "-o", "../../bin/ghp", "../../cmd/ghp")
+	t.Log("Building ghx binary for E2E tests...")
+	cmd := exec.Command("go", "build", "-o", "../../bin/ghx", "../../cmd/ghx")
 	if err := cmd.Run(); err != nil {
-		t.Fatalf("Failed to build ghp binary: %v", err)
+		t.Fatalf("Failed to build ghx binary: %v", err)
 	}
 
-	return "../../bin/ghp"
+	return "../../bin/ghx"
 }
 
 // CommandResult holds the result of a command execution
@@ -121,8 +122,8 @@ type CommandResult struct {
 	Err      error
 }
 
-// RunGHP executes the ghp command with given arguments
-func (c *TestConfig) RunGHP(args ...string) *CommandResult {
+// RunGHX executes the ghx command with given arguments
+func (c *TestConfig) RunGHX(args ...string) *CommandResult {
 	cmd := exec.Command(c.BinaryPath, args...)
 	cmd.Env = append(os.Environ(), "GITHUB_TOKEN="+c.Token)
 
@@ -148,8 +149,8 @@ func (c *TestConfig) RunGHP(args ...string) *CommandResult {
 	return result
 }
 
-// RunGHPWithTimeout executes the ghp command with timeout
-func (c *TestConfig) RunGHPWithTimeout(timeout time.Duration, args ...string) *CommandResult {
+// RunGHXWithTimeout executes the ghx command with timeout
+func (c *TestConfig) RunGHXWithTimeout(timeout time.Duration, args ...string) *CommandResult {
 	cmd := exec.Command(c.BinaryPath, args...)
 	cmd.Env = append(os.Environ(), "GITHUB_TOKEN="+c.Token)
 

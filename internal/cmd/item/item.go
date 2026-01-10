@@ -25,11 +25,11 @@ This command group provides comprehensive item management capabilities:
 
 For more information about GitHub Projects, visit:
 https://docs.github.com/en/issues/planning-and-tracking-with-projects`,
-		Example: `  ghp item list octocat/Hello-World               # List items from repository
-  ghp item add octocat/1 octocat/Hello-World#123  # Add issue to project
-  ghp item view octocat/Hello-World#456           # View item details
-  ghp item remove myorg/2 item-id --force         # Remove item from project
-  ghp item add octocat/1 --draft --title "Task"   # Create draft issue`,
+		Example: `  ghx item list octocat/Hello-World               # List items from repository
+  ghx item add octocat/1 octocat/Hello-World#123  # Add issue to project
+  ghx item view octocat/Hello-World#456           # View item details
+  ghx item remove myorg/2 item-id --force         # Remove item from project
+  ghx item add octocat/1 --draft --title "Task"   # Create draft issue`,
 	}
 
 	// Add subcommands

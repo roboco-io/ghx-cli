@@ -1,16 +1,16 @@
-# ghp-cli
+# ghx-cli
 
-[![CI](https://github.com/roboco-io/gh-project-cli/workflows/CI/badge.svg)](https://github.com/roboco-io/gh-project-cli/actions)
-[![E2E Tests](https://github.com/roboco-io/gh-project-cli/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/roboco-io/gh-project-cli/actions/workflows/ci.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/roboco-io/gh-project-cli)](https://goreportcard.com/report/github.com/roboco-io/gh-project-cli)
+[![CI](https://github.com/roboco-io/ghx-cli/workflows/CI/badge.svg)](https://github.com/roboco-io/ghx-cli/actions)
+[![E2E Tests](https://github.com/roboco-io/ghx-cli/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/roboco-io/ghx-cli/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/roboco-io/ghx-cli)](https://goreportcard.com/report/github.com/roboco-io/ghx-cli)
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> 🚧 **Work in Progress** - This tool is under active development. See [Issues](https://github.com/roboco-io/gh-project-cli/issues) for current status and roadmap.
+> 🚧 **Work in Progress** - This tool is under active development. See [Issues](https://github.com/roboco-io/ghx-cli/issues) for current status and roadmap.
 
-**ghp-cli** is a powerful command-line interface for GitHub features not fully supported by the official `gh` CLI. It provides complete control over GitHub Projects v2 and GitHub Discussions.
+**ghx-cli** (GitHub eXtensions) is a powerful command-line interface for GitHub features not fully supported by the official `gh` CLI. It provides complete control over GitHub Projects v2 and GitHub Discussions.
 
-## Why ghp-cli?
+## Why ghx-cli?
 
 The official GitHub CLI (`gh`) has limited support for several GitHub features:
 
@@ -27,7 +27,7 @@ The official GitHub CLI (`gh`) has limited support for several GitHub features:
 - ❌ **Answer Marking** - No Q&A answer management
 - ❌ **State Management** - No close, reopen, lock, unlock commands
 
-**ghp-cli fills these gaps** with comprehensive support for both features.
+**ghx-cli fills these gaps** with comprehensive support for both features.
 
 ## Features
 
@@ -72,7 +72,7 @@ The official GitHub CLI (`gh`) has limited support for several GitHub features:
 - **State Management**: Close, reopen, lock, and unlock discussions
 - **Categories**: List and filter by discussion categories
 
-### 🚧 In Development (See [Issues](https://github.com/roboco-io/gh-project-cli/issues))
+### 🚧 In Development (See [Issues](https://github.com/roboco-io/ghx-cli/issues))
 
 #### Phase 2: Enhanced Features - Q2 2024
 - [ ] Interactive TUI mode with Bubble Tea
@@ -97,24 +97,24 @@ The official GitHub CLI (`gh`) has limited support for several GitHub features:
 
 ### Homebrew (macOS/Linux)
 ```bash
-brew install ghp-cli
+brew install ghx-cli
 ```
 
 ### Go Install
 ```bash
-go install github.com/roboco-io/gh-project-cli/cmd/ghp@latest
+go install github.com/roboco-io/ghx-cli/cmd/ghx@latest
 ```
 
 ### Download Binary
 ```bash
-curl -L https://github.com/roboco-io/gh-project-cli/releases/latest/download/ghp-$(uname -s)-$(uname -m) -o ghp
-chmod +x ghp
-mv ghp /usr/local/bin/
+curl -L https://github.com/roboco-io/ghx-cli/releases/latest/download/ghx-$(uname -s)-$(uname -m) -o ghx
+chmod +x ghx
+mv ghx /usr/local/bin/
 ```
 
 ### Docker
 ```bash
-docker run --rm ghcr.io/roboco-io/gh-project-cli:latest --help
+docker run --rm ghcr.io/roboco-io/ghx-cli:latest --help
 ```
 
 ## Quick Start
@@ -122,60 +122,60 @@ docker run --rm ghcr.io/roboco-io/gh-project-cli:latest --help
 ```bash
 # Authentication - uses existing gh CLI tokens
 gh auth login  # First, authenticate with GitHub CLI
-ghp auth status  # Check authentication status (coming soon)
+ghx auth status  # Check authentication status (coming soon)
 
 # Or use environment variables as fallback
 export GITHUB_TOKEN="your-github-token"
 
 # List projects
-ghp list --org myorg
-ghp list --user myuser
+ghx list --org myorg
+ghx list --user myuser
 
 # Create a project
-ghp create "My Project" --org myorg --description "Project description"
+ghx create "My Project" --org myorg --description "Project description"
 
 # View project details
-ghp view PROJECT_ID
+ghx view PROJECT_ID
 
 # Add items to project
-ghp item add PROJECT_ID --issue owner/repo#42
-ghp item add PROJECT_ID --pr owner/repo#43
-ghp item add PROJECT_ID --draft "Task title" --body "Task description"
+ghx item add PROJECT_ID --issue owner/repo#42
+ghx item add PROJECT_ID --pr owner/repo#43
+ghx item add PROJECT_ID --draft "Task title" --body "Task description"
 
 # Manage fields
-ghp field create PROJECT_ID "Priority" --type single_select --options "High,Medium,Low"
-ghp field list PROJECT_ID
+ghx field create PROJECT_ID "Priority" --type single_select --options "High,Medium,Low"
+ghx field list PROJECT_ID
 
 # --- GitHub Discussions ---
 
 # List discussions
-ghp discussion list owner/repo
-ghp discussion list owner/repo --category ideas --state open
+ghx discussion list owner/repo
+ghx discussion list owner/repo --category ideas --state open
 
 # View a discussion
-ghp discussion view owner/repo 123
+ghx discussion view owner/repo 123
 
 # Create a discussion
-ghp discussion create owner/repo --category general --title "Question" --body "How do I...?"
+ghx discussion create owner/repo --category general --title "Question" --body "How do I...?"
 
 # Manage discussion state
-ghp discussion close owner/repo 123 --reason resolved
-ghp discussion reopen owner/repo 123
-ghp discussion lock owner/repo 123 --reason spam
+ghx discussion close owner/repo 123 --reason resolved
+ghx discussion reopen owner/repo 123
+ghx discussion lock owner/repo 123 --reason spam
 
 # Add comments
-ghp discussion comment owner/repo 123 --body "Thanks for the answer!"
+ghx discussion comment owner/repo 123 --body "Thanks for the answer!"
 
 # Mark answer (Q&A categories)
-ghp discussion answer owner/repo 123 --comment-id DC_xxx
+ghx discussion answer owner/repo 123 --comment-id DC_xxx
 
 # List categories
-ghp discussion category list owner/repo
+ghx discussion category list owner/repo
 ```
 
 ## Configuration
 
-Create a config file at `~/.ghp.yaml`:
+Create a config file at `~/.ghx.yaml`:
 
 ```yaml
 # GitHub authentication
@@ -192,10 +192,10 @@ limit: 50
 ```
 
 Environment variables:
-- `GHP_TOKEN` or `GITHUB_TOKEN` - GitHub Personal Access Token
-- `GHP_ORG` - Default organization
-- `GHP_FORMAT` - Default output format (table, json, yaml)
-- `GHP_DEBUG` - Enable debug output
+- `GHX_TOKEN` or `GITHUB_TOKEN` - GitHub Personal Access Token
+- `GHX_ORG` - Default organization
+- `GHX_FORMAT` - Default output format (table, json, yaml)
+- `GHX_DEBUG` - Enable debug output
 
 ## Examples
 
@@ -244,8 +244,8 @@ graph TB
 
 ### Setup
 ```bash
-git clone https://github.com/roboco-io/gh-project-cli.git
-cd ghp-cli
+git clone https://github.com/roboco-io/ghx-cli.git
+cd ghx-cli
 make setup
 ```
 
@@ -269,7 +269,7 @@ We welcome contributions! Please see:
 - [Contributing Guide](CONTRIBUTING.md)
 - [Development Setup](docs/DEVELOPMENT.md)
 - [Architecture Overview](docs/ARCHITECTURE.md)
-- [Open Issues](https://github.com/roboco-io/gh-project-cli/issues)
+- [Open Issues](https://github.com/roboco-io/ghx-cli/issues)
 
 ## Roadmap
 
@@ -278,9 +278,9 @@ See our [detailed roadmap](docs/PRD.md#14-타임라인) and [feature comparison]
 ## Support
 
 - 📖 [Documentation](docs/)
-- 🐛 [Bug Reports](https://github.com/roboco-io/gh-project-cli/issues/new?template=bug_report.md)
-- 💡 [Feature Requests](https://github.com/roboco-io/gh-project-cli/issues/new?template=feature_request.md)
-- 💬 [Discussions](https://github.com/roboco-io/gh-project-cli/discussions)
+- 🐛 [Bug Reports](https://github.com/roboco-io/ghx-cli/issues/new?template=bug_report.md)
+- 💡 [Feature Requests](https://github.com/roboco-io/ghx-cli/issues/new?template=feature_request.md)
+- 💬 [Discussions](https://github.com/roboco-io/ghx-cli/discussions)
 
 ## License
 

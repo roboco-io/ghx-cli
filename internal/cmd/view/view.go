@@ -43,22 +43,22 @@ View Operations:
   group       - Configure view grouping options`,
 
 		Example: `  # List all views in a project
-  ghp view list octocat/123
+  ghx view list octocat/123
 
   # Create a new table view
-  ghp view create octocat/123 "Sprint Dashboard" table
+  ghx view create octocat/123 "Sprint Dashboard" table
 
   # Create a board view with filter
-  ghp view create octocat/123 "Bug Tracking" board --filter "label:bug"
+  ghx view create octocat/123 "Bug Tracking" board --filter "label:bug"
 
   # Copy an existing view
-  ghp view copy view-id "New Sprint Board"
+  ghx view copy view-id "New Sprint Board"
 
   # Update view name
-  ghp view update view-id --name "Updated Dashboard"
+  ghx view update view-id --name "Updated Dashboard"
 
   # Configure view sorting
-  ghp view sort view-id --field priority --direction desc`,
+  ghx view sort view-id --field priority --direction desc`,
 	}
 
 	// Add format flag to all subcommands

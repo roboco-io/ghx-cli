@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // ListOptions holds options for the list command
@@ -32,9 +32,9 @@ This command displays all views configured for a project, showing their
 names, layouts, and basic configuration.
 
 Examples:
-  ghp view list octocat/123
-  ghp view list --org myorg/456
-  ghp view list octocat/123 --format json`,
+  ghx view list octocat/123
+  ghx view list --org myorg/456
+  ghx view list octocat/123 --format json`,
 
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

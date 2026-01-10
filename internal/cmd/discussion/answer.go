@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/auth"
-	"github.com/roboco-io/gh-project-cli/internal/service"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/auth"
+	"github.com/roboco-io/ghx-cli/internal/service"
 )
 
 // AnswerOptions holds options for the answer command
@@ -31,8 +31,8 @@ func NewAnswerCmd() *cobra.Command {
 
 This only works for discussions in answerable categories (like Q&A).
 Use --unmark to remove the answer designation from a comment.`,
-		Example: `  ghp discussion answer owner/repo 123 --comment-id DC_xxx
-  ghp discussion answer owner/repo 123 --comment-id DC_xxx --unmark`,
+		Example: `  ghx discussion answer owner/repo 123 --comment-id DC_xxx
+  ghx discussion answer owner/repo 123 --comment-id DC_xxx --unmark`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Repo = args[0]

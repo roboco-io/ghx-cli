@@ -8,8 +8,8 @@ import (
 
 	gql "github.com/shurcooL/graphql"
 
-	"github.com/roboco-io/gh-project-cli/internal/api"
-	"github.com/roboco-io/gh-project-cli/internal/api/graphql"
+	"github.com/roboco-io/ghx-cli/internal/api"
+	"github.com/roboco-io/ghx-cli/internal/api/graphql"
 )
 
 // DiscussionService handles discussion-related operations
