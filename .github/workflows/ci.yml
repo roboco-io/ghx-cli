@@ -7,7 +7,7 @@ on:
     branches: [ main, develop ]
 
 env:
-  GO_VERSION: '1.23'
+  GO_VERSION: '1.24'
 
 jobs:
   test:
@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        go-version: ['1.21', '1.22', '1.23']
+        go-version: ['1.23', '1.24']
 
     steps:
     - name: Check out code
@@ -60,7 +60,7 @@ jobs:
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v6
       with:
-        version: v1.62.2
+        version: v1.64.8
         args: --timeout=5m
 
   # E2E tests are run locally via lefthook pre-push hook
