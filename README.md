@@ -242,56 +242,56 @@ make test
 
 ## AI Agent Integration
 
-`ghx`는 AI 에이전트(Claude Code, Copilot 등)가 GitHub Projects v2와 Discussions를 관리할 수 있도록 설계되었습니다. 아래 내용을 프로젝트의 `CLAUDE.md` 또는 에이전트 설정 파일에 추가하면 에이전트가 `ghx` 명령어를 활용할 수 있습니다.
+`ghx` can be used by AI agents (Claude Code, Copilot, etc.) to manage GitHub Projects v2 and Discussions. Copy the snippet below into your project's `CLAUDE.md` or agent configuration file to enable `ghx` commands.
 
-### CLAUDE.md에 추가할 내용
+### Snippet for CLAUDE.md
 
 ````markdown
 ## ghx-cli (GitHub eXtensions)
 
-이 프로젝트는 `ghx` CLI를 사용하여 GitHub Projects v2와 Discussions를 관리합니다.
-`ghx`는 `gh` CLI가 지원하지 않는 기능을 제공합니다. 인증은 `gh auth token`을 우선 사용하고,
-`GITHUB_TOKEN` 환경변수로 폴백합니다.
+This project uses the `ghx` CLI to manage GitHub Projects v2 and Discussions —
+features not fully supported by the official `gh` CLI. Authentication uses
+`gh auth token` first, falling back to the `GITHUB_TOKEN` environment variable.
 
-### 주요 명령어
+### Key Commands
 
 ```bash
-# 프로젝트 관리
-ghx project list --org <org>          # 조직의 프로젝트 목록
-ghx project create "<name>" --org <org>  # 프로젝트 생성
-ghx project view <owner>/<number>     # 프로젝트 상세 조회
+# Project management
+ghx project list --org <org>             # List projects in an organization
+ghx project create "<name>" --org <org>  # Create a project
+ghx project view <owner>/<number>        # View project details
 
-# 아이템 관리
-ghx item list <project-id>            # 프로젝트 아이템 목록
-ghx item add <project-id> --issue <owner>/<repo>#<number>  # 이슈 추가
-ghx item add <project-id> --draft --title "<title>"        # 드래프트 생성
+# Item management
+ghx item list <project-id>                                  # List project items
+ghx item add <project-id> --issue <owner>/<repo>#<number>   # Add an issue
+ghx item add <project-id> --draft --title "<title>"         # Create a draft item
 
-# 필드 관리
-ghx field list <project-id>           # 필드 목록
+# Field management
+ghx field list <project-id>              # List fields
 ghx field create <project-id> "<name>" --type single_select --options "A,B,C"
 
-# 뷰 관리
-ghx view list <project-id>            # 뷰 목록
+# View management
+ghx view list <project-id>              # List views
 ghx view create <project-id> "<name>" --layout board
 
-# 디스커션 관리
-ghx discussion list <owner>/<repo>    # 디스커션 목록
+# Discussion management
+ghx discussion list <owner>/<repo>      # List discussions
 ghx discussion create <owner>/<repo> --category <category> --title "<title>" --body "<body>"
 ghx discussion close <owner>/<repo> <number> --reason resolved
 ghx discussion comment <owner>/<repo> <number> --body "<comment>"
 
-# 분석
-ghx analytics overview <project-id>   # 프로젝트 통계
+# Analytics
+ghx analytics overview <project-id>     # Project statistics
 ```
 
-### 출력 형식
+### Output Formats
 
-`--format` 플래그로 출력 형식을 지정할 수 있습니다:
-- `table` (기본값) - 사람이 읽기 좋은 테이블
-- `json` - 프로그래밍 처리에 적합
-- `yaml` - 설정 파일 형식
+Use the `--format` flag to control output:
+- `table` (default) — human-readable table
+- `json` — suitable for programmatic parsing
+- `yaml` — configuration-style output
 
-에이전트가 출력을 파싱해야 할 경우 `--format json`을 사용하세요.
+Use `--format json` when the agent needs to parse the output.
 ````
 
 ## License
